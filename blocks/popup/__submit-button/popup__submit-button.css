@@ -8,14 +8,21 @@
   line-height: 22px;
   text-align: center;
   color: #fff;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 0;
+  transition: opacity 1s;
+  padding: 0;
   margin: 48px 36px 37px 36px;
 }
 
 .popup__submit-button:hover {
   opacity: 0.8;
+  cursor: pointer;
 }
 
-@media screen and (max-width: 880px) {
+@media screen and (max-width: 934px) {
   .popup__submit-button {
     width: 238px;
     height: 46px;

@@ -16,12 +16,12 @@
     <section class="popup">
       <div class="popup__container">
         <h2 class="popup__title">Редактировать профиль</h2>
-        <input type="text" id="author-name" name="author-name" class="popup__field popup__field_el_name"
-          placeholder="Жак-Ив Кусто">
-        <input type="text" id="profession" name="profession" class="popup__field popup__field_el_profession"
-          placeholder="Исследователь океана">
-        <button class="popup__submit-button button">Сохранить</button>
-        <button class="popup__close-button button"><span class="button__sr-only">Закрыть</span></button>
+        <form class="popup__form" action="#" method="POST">
+          <input type="text" id="author-name" name="author-name" class="popup__field" placeholder="Жак-Ив Кусто">
+          <input type="text" id="profession" name="profession" class="popup__field" placeholder="Исследователь океана">
+          <button type="submit" class="popup__submit-button">Сохранить</button>
+        </form>
+        <button type="button" aria-label="Закрыть" class="popup__close-button"></button>
       </div>
     </section>
 
@@ -38,72 +38,60 @@
             <h1 class="profile__title">Жак-Ив Кусто</h1>
             <p class="profile__subtitle">Исследователь океана</p>
           </div>
-          <button class="profile__edit-button button"><span class="button__sr-only">Редактировть профиль</span></button>
+          <button type="button" aria-label="Редактировать профиль" class="profile__edit-button button"></button>
         </div>
-        <button class="profile__add-button button"><span class="button__sr-only">Добавить новое место</span></button>
+        <button type="button" aria-label="Добавить новое место" class="profile__add-button button"></button>
       </section>
 
       <section class="cards main__cards">
         <ul class="cards__list">
 
-          <li class="cards__item">
-            <figure class="cards__body">
-              <img src="./images/cards/church.png" alt="Церковь" class="cards__img">
-              <figcaption class="cards__footer">
-                <p class="cards__title">Карачаевск</p>
-                <button class="cards__like-button button"><span class="button__sr-only">Лайкнуть</span></button>
-              </figcaption>
-            </figure>
+          <li class="cards__body">
+            <img src="./images/cards/church.png" alt="Церковь" class="cards__img">
+            <div class="cards__footer">
+              <p class="cards__title">Карачаевск</p>
+              <button type="button" aria-label="Лайкнуть" class="cards__like-button button"></button>
+            </div>
           </li>
 
-          <li class="cards__item">
-            <figure class="cards__body">
-              <img src="./images/cards/mountain.png" alt="Церковь" class="cards__img">
-              <figcaption class="cards__footer">
-                <p class="cards__title">Гора Эльбрус</p>
-                <button class="cards__like-button button"><span class="button__sr-only">Лайкнуть</span></button>
-              </figcaption>
-            </figure>
+          <li class="cards__body">
+            <img src="./images/cards/mountain.png" alt="Церковь" class="cards__img">
+            <div class="cards__footer">
+              <p class="cards__title">Гора Эльбрус</p>
+              <button type="button" aria-label="Лайкнуть" class="cards__like-button button"></button>
+            </div>
           </li>
 
-          <li class="cards__item">
-            <figure class="cards__body">
-              <img src="./images/cards/lonely-mountain.png" alt="Церковь" class="cards__img">
-              <figcaption class="cards__footer">
-                <p class="cards__title">Домбай</p>
-                <button class="cards__like-button button"><span class="button__sr-only">Лайкнуть</span></button>
-              </figcaption>
-            </figure>
+          <li class="cards__body">
+            <img src="./images/cards/lonely-mountain.png" alt="Церковь" class="cards__img">
+            <div class="cards__footer">
+              <p class="cards__title">Домбай</p>
+              <button type="button" aria-label="Лайкнуть" class="cards__like-button button"></button>
+            </div>
           </li>
 
-          <li class="cards__item">
-            <figure class="cards__body">
-              <img src="./images/cards/mountain.png" alt="Церковь" class="cards__img">
-              <figcaption class="cards__footer">
-                <p class="cards__title">Гора Эльбрус</p>
-                <button class="cards__like-button button"><span class="button__sr-only">Лайкнуть</span></button>
-              </figcaption>
-            </figure>
+          <li class="cards__body">
+            <img src="./images/cards/mountain.png" alt="Церковь" class="cards__img">
+            <div class="cards__footer">
+              <p class="cards__title">Гора Эльбрус</p>
+              <button type="button" aria-label="Лайкнуть" class="cards__like-button button"></button>
+            </div>
           </li>
 
-          <li class="cards__item">
-            <figure class="cards__body">
-              <img src="./images/cards/lonely-mountain.png" alt="Церковь" class="cards__img">
-              <figcaption class="cards__footer">
-                <p class="cards__title">Домбай</p>
-                <button class="cards__like-button button"><span class="button__sr-only">Лайкнуть</span></button>
-              </figcaption>
-            </figure>
+          <li class="cards__body">
+            <img src="./images/cards/lonely-mountain.png" alt="Церковь" class="cards__img">
+            <div class="cards__footer">
+              <p class="cards__title">Домбай</p>
+              <button type="button" aria-label="Лайкнуть" class="cards__like-button button"></button>
+            </div>
           </li>
 
-          <li class="cards__item">
-            <figure class="cards__body">
-              <img src="./images/cards/church.png" alt="Церковь" class="cards__img">
-              <figcaption class="cards__footer">
-                <p class="cards__title">Карачаево-Черкесия</p>
-                <button class="cards__like-button button"><span class="button__sr-only">Лайкнуть</span></button>
-              </figcaption>
-            </figure>
+          <li class="cards__body">
+            <img src="./images/cards/church.png" alt="Церковь" class="cards__img">
+            <div class="cards__footer">
+              <p class="cards__title">Карачаево-Черкесия</p>
+              <button type="button" aria-label="Лайкнуть" class="cards__like-button button"></button>
+            </div>
           </li>
 
         </ul>
