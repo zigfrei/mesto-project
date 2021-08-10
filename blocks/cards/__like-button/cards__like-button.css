@@ -4,8 +4,16 @@
   width: 22px;
   height: 19px;
   background-color: transparent;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 0;
+  border-radius: 0;
+  transition: opacity 1s;
+  padding: 0;
 }
 
 .cards__like-button:hover {
   opacity: 0.5;
+  cursor: pointer;
 }

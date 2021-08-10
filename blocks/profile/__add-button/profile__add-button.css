@@ -10,6 +10,15 @@
   border: 2px solid #ffffff;
   box-sizing: border-box;
   border-radius: 2px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  transition: opacity 1s;
+}
+
+.profile__add-button:hover {
+  opacity: 0.6;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 934px) {
