@@ -21,6 +21,11 @@
   cursor: pointer;
 }
 
+.profile__edit-button:focus {
+  outline: 0;
+
+}
+
 @media screen and (max-width: 934px) {
   .profile__edit-button {
     margin-top: 30.25px;
