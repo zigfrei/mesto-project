@@ -22,4 +22,4 @@ if(event.target.classList.contains('popup__close-button') || event.target.classL
 });
 
 //Второе условие
-
+/* */
