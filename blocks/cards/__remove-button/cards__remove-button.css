@@ -1,8 +1,8 @@
-.cards__like-button {
-  background-image: url(../../../images/cards/vector.svg);
+.cards__remove-button {
+  background-image: url(../../../images/cards/Trash.svg);
   background-repeat: no-repeat;
-  width: 22px;
-  height: 19px;
+  width: 18px;
+  height: 19.3px;
   background-color: transparent;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -11,14 +11,16 @@
   border-radius: 0;
   transition: opacity 1s;
   padding: 0;
+  position: absolute;
+  top: 18px;
+  right: 15px;
 }
 
-.cards__like-button:hover {
+.cards__remove-button:hover {
   opacity: 0.5;
   cursor: pointer;
 }
 
-.cards__like-button:focus {
+.cards__remove-button:focus {
   outline: none;
-
 }

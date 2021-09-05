@@ -21,6 +21,10 @@
   cursor: pointer;
 }
 
+.profile__add-button:focus {
+  outline: 0;
+}
+
 @media screen and (max-width: 934px) {
   .profile__add-button {
     margin: 36px 19px 0 19px;

@@ -3,3 +3,9 @@
   width: 120px;
   box-sizing: border-box;
 }
+
+@media screen and (max-width: 934px) {
+  .profile__avatar {
+    margin: 0 90px;
+  }
+}

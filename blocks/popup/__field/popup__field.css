@@ -16,25 +16,26 @@
 }
 
 ::-webkit-input-placeholder {
-  color: inherit;
+  color: #C4C4C4;
+  ;
   opacity: 1;
   transition: opacity 0.3s;
 }
 
 ::-moz-placeholder {
-  color: inherit;
+  color: #C4C4C4;
   opacity: 1;
   transition: opacity 0.3s;
 }
 
 :-moz-placeholder {
-  color: inherit;
+  color: #C4C4C4;
   opacity: 1;
   transition: opacity 0.3s;
 }
 
 :-ms-input-placeholder {
-  color: inherit;
+  color: #C4C4C4;
   opacity: 1;
   transition: opacity 0.3s;
 }
