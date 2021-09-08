@@ -140,8 +140,7 @@ function formSubmitCard(evt) {
   const cardName = document.querySelector("#card-name");
   const cardLink = document.querySelector("#card-link");
   addCard(cardsContainer, createCard(cardName.value, cardLink.value));
-  cardName.value = "";
-  cardLink.value = "";
+  cardName.closest("form").reset();
   closePopup(popupAddcard);
 }
 
