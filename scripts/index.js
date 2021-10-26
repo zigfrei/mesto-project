@@ -163,3 +163,22 @@ popupImgOpen.addEventListener("click", (event) => {
     closePopup(popupImgOpen);
   }
 });
+
+//Закрываем закрываем модальное окно нажатием клавиши Escape
+
+function escHandler (event){
+  if (event.key === 'Escape'){
+    if(popupMain.classList.contains("popup_opened")){
+      closePopup(popupMain);
+    };
+    if(popupImgOpen.classList.contains("popup_opened")){
+      closePopup(popupImgOpen);
+    };
+    if(popupAddcard.classList.contains("popup_opened")){
+      closePopup(popupAddcard);
+    };
+  };
+};
+
+document.addEventListener('keydown', escHandler);
+
