@@ -1,21 +1,14 @@
-//Открытие и закрытие модального окна
-const editButton = document.querySelector(".profile__edit-button");
-const popupMain = document.querySelector(".popup_theme_main");
-//Функция попапа картинки
-const popupImgOpen = document.querySelector(".popup_theme_img");
 
-function openPopup(popup) {
-  popup.classList.add("popup_opened");
-}
+import {popupMain, editButton, openPopup, closePopup, profileTitleName, profileSubtitleName, nameInput, jobInput, formElement, formSubmitHandler} from '../components/modal.js';
+import {cardsContainer, createCard, popupImgOpen, addCard, initialCards, addCardButton, popupAddcard, formCardElement, formSubmitCard} from '../components/card.js';
+import {escHandler} from '../components/utils.js';
 
-function closePopup(popup) {
-  popup.classList.remove("popup_opened");
-}
-
+//Слушатель нажатия на кнопку редактора профиля
 editButton.addEventListener("click", () => {
   openPopup(popupMain);
 });
 
+//Слушатель выхода из редактора профиля
 popupMain.addEventListener("click", (event) => {
   if (
     event.target.classList.contains("popup__close-button") ||
@@ -25,105 +18,25 @@ popupMain.addEventListener("click", (event) => {
   }
 });
 
-//Заполнение полей формы
 
-const profileTitleName = document.querySelector(".profile__title");
-const profileSubtitleName = document.querySelector(".profile__subtitle");
-
-const nameInput = document.querySelector("#author-name");
-const jobInput = document.querySelector("#profession");
+//Значение полей имя и деятельность передается в модальную форму профиля
 nameInput.value = profileTitleName.textContent;
 jobInput.value = profileSubtitleName.textContent;
 
-//Редактирование имени и информации о себе
-
-const formElement = popupMain.querySelector(".popup__form");
-
-function formSubmitHandler(evt) {
-  evt.preventDefault();
-  profileTitleName.textContent = nameInput.value;
-  profileSubtitleName.textContent = jobInput.value;
-  closePopup(popupMain);
-}
-
+//Слушатель сохранения изменений по нажатию кнопки в модальном окне
 formElement.addEventListener("submit", formSubmitHandler);
 
-//Шесть карточек «из коробки» + функция добавления новой карточки + лайки+ удаление карточки
-const cardsContainer = document.querySelector(".cards__list");
-
-function createCard(cardNameValue, cardLinkValue) {
-  const cardTemplate = document.querySelector("#card-template").content;
-  const cardElement = cardTemplate
-    .querySelector(".cards__body")
-    .cloneNode(true);
-  const cardImgContainer = cardElement.querySelector(".cards__img");
-
-  cardElement.querySelector(".cards__title").textContent = cardNameValue;
-  cardImgContainer.src = cardLinkValue;
-  cardImgContainer.alt = cardNameValue;
-  cardElement
-    .querySelector(".cards__like-button")
-    .addEventListener("click", function (evt) {
-      evt.target.classList.toggle("cards__like-button_status_active");
-    });
-  cardElement
-    .querySelector(".cards__remove-button")
-    .addEventListener("click", function (evt) {
-      evt.target.closest(".cards__body").remove();
-    });
-
-  cardElement
-    .querySelector(".cards__img")
-    .addEventListener("click", function () {
-      addImgPopup(popupImgOpen, cardNameValue, cardLinkValue);
-      openPopup(popupImgOpen);
-    });
-  return cardElement;
-}
-
-function addCard(container, cardElementAdd) {
-  container.prepend(cardElementAdd);
-}
-
-const initialCards = [
-  {
-    name: "Архыз",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg",
-  },
-  {
-    name: "Челябинская область",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg",
-  },
-  {
-    name: "Иваново",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg",
-  },
-  {
-    name: "Камчатка",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg",
-  },
-  {
-    name: "Холмогорский район",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg",
-  },
-  {
-    name: "Байкал",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
-  },
-];
-
+//Инициализация набора карточек по заводу
 initialCards.forEach((element) => {
   addCard(cardsContainer, createCard(element.name, element.link));
 });
 
-//Форма добавления новой карточки
-
-const addCardButton = document.querySelector(".profile__add-button");
-const popupAddcard = document.querySelector(".popup_theme_card");
+//Слушатель нажатия на кнопку добавить карточку
 addCardButton.addEventListener("click", () => {
   openPopup(popupAddcard);
 });
 
+//Слушатель закрытия модального окна при нажатии на кнопку или вне поля модального окна
 popupAddcard.addEventListener("click", (event) => {
   if (
     event.target.classList.contains("popup__close-button") ||
@@ -133,28 +46,10 @@ popupAddcard.addEventListener("click", (event) => {
   }
 });
 
-const formCardElement = popupAddcard.querySelector(".popup__form");
-
-function formSubmitCard(evt) {
-  evt.preventDefault();
-  const cardName = document.querySelector("#card-name");
-  const cardLink = document.querySelector("#card-link");
-  addCard(cardsContainer, createCard(cardName.value, cardLink.value));
-  cardName.closest("form").reset();
-  closePopup(popupAddcard);
-}
-
+//Слушатель добавления карточки по нажатию кнопки в модальном окне
 formCardElement.addEventListener("submit", formSubmitCard);
 
-//Функция попапа картинки
-
-function addImgPopup(popup, cardForPopup, imgLinkForPopup) {
-  const imgPopupContainer = popup.querySelector(".popup__img");
-  imgPopupContainer.src = imgLinkForPopup;
-  imgPopupContainer.alt = cardForPopup;
-  popup.querySelector(".popup__caption").textContent = cardForPopup;
-}
-
+//Слушатель закрытия модального окна картинки при нажатии на кнопку или вне поля модального окна
 popupImgOpen.addEventListener("click", (event) => {
   if (
     event.target.classList.contains("popup__close-button") ||
@@ -164,21 +59,6 @@ popupImgOpen.addEventListener("click", (event) => {
   }
 });
 
-//Закрываем закрываем модальное окно нажатием клавиши Escape
-
-function escHandler (event){
-  if (event.key === 'Escape'){
-    if(popupMain.classList.contains("popup_opened")){
-      closePopup(popupMain);
-    };
-    if(popupImgOpen.classList.contains("popup_opened")){
-      closePopup(popupImgOpen);
-    };
-    if(popupAddcard.classList.contains("popup_opened")){
-      closePopup(popupAddcard);
-    };
-  };
-};
-
+//Слушатель закрытия модального окна нажатием клавиши Escape
 document.addEventListener('keydown', escHandler);
 
