@@ -10,6 +10,14 @@ const popupAddcard = document.querySelector(".popup_theme_card");
 //Форма добавления карточки
 const formCardElement = popupAddcard.querySelector(".popup__form");
 
+//Картинки для Webpack
+// const Arhiz = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg", import.meta.url);
+// const Chelyabinsk = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg", import.meta.url);
+// const Ivanovo = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg", import.meta.url);
+// const Kamchatka = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg", import.meta.url);
+// const Kholmogorsky = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg", import.meta.url);
+// const Baikal = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg", import.meta.url);
+
 //Функция создания карточки
 function createCard(cardNameValue, cardLinkValue) {
   const cardTemplate = document.querySelector("#card-template").content;
@@ -19,6 +27,7 @@ function createCard(cardNameValue, cardLinkValue) {
   const cardImgContainer = cardElement.querySelector(".cards__img");
 
   cardElement.querySelector(".cards__title").textContent = cardNameValue;
+  // cardImgContainer.src = `<%=require(${cardLinkValue})%>`;
   cardImgContainer.src = cardLinkValue;
   cardImgContainer.alt = cardNameValue;
   cardElement
@@ -63,6 +72,8 @@ function formSubmitCard(evt) {
   cardName.closest("form").reset();
   closePopup(popupAddcard);
 }
+
+
 
 //Массив объектов карточек по заводу
 const initialCards = [

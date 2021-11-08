@@ -1,8 +1,8 @@
-
-import {popupMain, editButton, openPopup, closePopup, profileTitleName, profileSubtitleName, nameInput, jobInput, formElement, formSubmitHandler} from '../components/modal.js';
-import {cardsContainer, createCard, popupImgOpen, addCard, initialCards, addCardButton, popupAddcard, formCardElement, formSubmitCard} from '../components/card.js';
-import {escHandler} from '../components/utils.js';
-import {enableValidation} from '../components/validate.js';
+import './pages/index.css';
+import {popupMain, editButton, openPopup, closePopup, profileTitleName, profileSubtitleName, nameInput, jobInput, formElement, formSubmitHandler} from './components/modal.js';
+import {cardsContainer, createCard, popupImgOpen, addCard, initialCards, addCardButton, popupAddcard, formCardElement, formSubmitCard} from './components/card.js';
+import {escHandler} from './components/utils.js';
+import {enableValidation} from './components/validate.js';
 
 //Слушатель нажатия на кнопку редактора профиля
 editButton.addEventListener("click", () => {
