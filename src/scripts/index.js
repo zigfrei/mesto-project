@@ -2,6 +2,7 @@
 import {popupMain, editButton, openPopup, closePopup, profileTitleName, profileSubtitleName, nameInput, jobInput, formElement, formSubmitHandler} from '../components/modal.js';
 import {cardsContainer, createCard, popupImgOpen, addCard, initialCards, addCardButton, popupAddcard, formCardElement, formSubmitCard} from '../components/card.js';
 import {escHandler} from '../components/utils.js';
+import {enableValidation} from '../components/validate.js';
 
 //Слушатель нажатия на кнопку редактора профиля
 editButton.addEventListener("click", () => {
@@ -62,3 +63,13 @@ popupImgOpen.addEventListener("click", (event) => {
 //Слушатель закрытия модального окна нажатием клавиши Escape
 document.addEventListener('keydown', escHandler);
 
+
+//Функция валидации модальных окон
+enableValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__field',
+  submitButtonSelector: '.popup__submit-button',
+  inactiveButtonClass: 'popup__submit-button_disabled',
+  inputErrorClass: 'popup__field_type_error',
+  errorClass: 'popup__field-error_active'
+});
