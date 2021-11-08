@@ -7,12 +7,17 @@
 @import url(../blocks/popup/__field/popup__field.css);
 @import url(../blocks/popup/_opened/popup_opened.css);
 @import url(../blocks/popup/__submit-button/popup__submit-button.css);
+@import url(../blocks/popup/__submit-button/_disabled/popup__submit-button_disabled.css);
 @import url(../blocks/popup/__close-button/popup__close-button.css);
 @import url(../blocks/popup/__img/popup__img.css);
 @import url(../blocks/popup/__caption/popup__caption.css);
 @import url(../blocks/popup/__figure/popup__figure.css);
 @import url(../blocks/popup/__img-container/popup__img-container.css);
 @import url(../blocks/popup/_theme/popup_theme_img.css);
+@import url(../blocks/popup/__field-wrapper/popup__field-wrapper.css);
+@import url(../blocks/popup/__field-error/popup__field-error.css);
+@import url(../blocks/popup/__field-error/_active/popup__field-error_active.css);
+@import url(../blocks/popup/__field/_type/popup__field_type_error.css);
 @import url(../blocks/page/__header/page__header.css);
 @import url(../blocks/page/__main/page__main.css);
 @import url(../blocks/page/__footer/page__footer.css);

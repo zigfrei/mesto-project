@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./pages/index.css">
+  <!-- <link rel="stylesheet" href="./pages/index.css"> -->
   <title>Mesto</title>
 </head>
 
@@ -16,9 +16,15 @@
     <section class="popup popup_theme_main">
       <div class="popup__container">
         <h2 class="popup__title">Редактировать профиль</h2>
-        <form name="submit-form" class="popup__form" action="#" method="POST">
-          <input type="text" id="author-name" name="author-name" class="popup__field" placeholder="Имя">
-          <input type="text" id="profession" name="profession" class="popup__field" placeholder="Профессиональная деятельность">
+        <form name="submit-form" class="popup__form" action="#" method="POST" novalidate>
+          <label class="popup__field-wrapper">
+          <input required minlength="2" maxlength="40" type="text" id="author-name" name="author-name" class="popup__field" placeholder="Имя">
+          <span class="popup__field-error popup__field-error_active author-name-error"></span>
+          </label>
+          <label class="popup__field-wrapper">
+          <input required minlength="2" maxlength="200" type="text" id="profession" name="profession" class="popup__field" placeholder="Профессиональная деятельность">
+          <span class="popup__field-error popup__field-error_active profession-error"></span>
+        </label>
           <button type="submit" class="popup__submit-button">Сохранить</button>
         </form>
         <button type="button" aria-label="Закрыть" class="popup__close-button"></button>
@@ -28,9 +34,15 @@
     <section class="popup popup_theme_card">
       <div class="popup__container">
         <h2 class="popup__title">Новое место</h2>
-        <form name="submit-form" class="popup__form" action="#" method="POST">
-          <input type="text" id="card-name" name="card-name" class="popup__field" placeholder="Название">
-          <input type="url" id="card-link" name="card-link" class="popup__field " placeholder="Ссылка на картинку">
+        <form name="submit-form" class="popup__form" action="#" method="POST" novalidate>
+          <label class="popup__field-wrapper">
+          <input required minlength="2" maxlength="30" type="text" id="card-name" name="card-name" class="popup__field" placeholder="Название">
+          <span class="popup__field-error card-name-error"></span>
+          </label>
+          <label class="popup__field-wrapper">
+          <input required type="url" id="card-link" name="card-link" class="popup__field " placeholder="Ссылка на картинку">
+          <span class="popup__field-error card-link-error"></span>
+          </label>
           <button type="submit" class="popup__submit-button">Создать</button>
         </form>
         <button type="button" aria-label="Закрыть" class="popup__close-button"></button>
@@ -54,7 +66,7 @@
 
       <section class="profile main__profile">
         <div class="profile__content">
-          <img src="./images/profile/image.jpg" alt="Фото владельца профиля" class="profile__avatar">
+          <img src="<%=require("./images/profile/image.jpg")%>" alt="Фото владельца профиля" class="profile__avatar">
           <div class="profile__info">
             <h1 class="profile__title">Жак-Ив Кусто</h1>
             <p class="profile__subtitle">Исследователь океана</p>
@@ -89,7 +101,7 @@
     </li>
   </template>
 
-  <script src="./scripts/index.js"></script>
+  <!-- <script type="module" src="./index.js"></script> -->
 </body>
 
 </html>
