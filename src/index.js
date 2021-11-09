@@ -1,31 +1,52 @@
-import './pages/index.css';
-import {popupMain, editButton, openPopup, closePopup, profileTitleName, profileSubtitleName, nameInput, jobInput, formElement, formSubmitHandler} from './components/modal.js';
-import {cardsContainer, createCard, popupImgOpen, addCard, initialCards, addCardButton, popupAddcard, formCardElement, formSubmitCard} from './components/card.js';
-import {escHandler} from './components/utils.js';
-import {enableValidation} from './components/validate.js';
+import "./pages/index.css";
+import {
+  popupMain,
+  editButton,
+  openPopup,
+  profileTitleName,
+  profileSubtitleName,
+  nameInput,
+  jobInput,
+  profileFormElement,
+  saveProfileFormInput,
+  addContentFromProfile,
+} from "./components/modal.js";
+import {
+  cardsContainer,
+  createCard,
+  popupImgOpen,
+  addCard,
+  initialCards,
+  addCardButton,
+  popupAddCard,
+  formCardElement,
+  addCardFromPopup,
+} from "./components/card.js";
+import { closeButtonHandler } from "./components/utils.js";
+import { enableValidation } from "./components/validate.js";
 
 //Слушатель нажатия на кнопку редактора профиля
 editButton.addEventListener("click", () => {
+  addContentFromProfile(profileTitleName, nameInput);
+  addContentFromProfile(profileSubtitleName, jobInput);
   openPopup(popupMain);
+  enableValidation({
+    formSelector: ".popup__form",
+    inputSelector: ".popup__field",
+    submitButtonSelector: ".popup__submit-button",
+    inactiveButtonClass: "popup__submit-button_disabled",
+    inputErrorClass: "popup__field_type_error",
+    errorClass: "popup__field-error_active",
+  });
 });
 
 //Слушатель выхода из редактора профиля
 popupMain.addEventListener("click", (event) => {
-  if (
-    event.target.classList.contains("popup__close-button") ||
-    event.target.classList.contains("popup")
-  ) {
-    closePopup(popupMain);
-  }
+  closeButtonHandler(event, popupMain);
 });
 
-
-//Значение полей имя и деятельность передается в модальную форму профиля
-nameInput.value = profileTitleName.textContent;
-jobInput.value = profileSubtitleName.textContent;
-
 //Слушатель сохранения изменений по нажатию кнопки в модальном окне
-formElement.addEventListener("submit", formSubmitHandler);
+profileFormElement.addEventListener("submit", saveProfileFormInput);
 
 //Инициализация набора карточек по заводу
 initialCards.forEach((element) => {
@@ -34,42 +55,27 @@ initialCards.forEach((element) => {
 
 //Слушатель нажатия на кнопку добавить карточку
 addCardButton.addEventListener("click", () => {
-  openPopup(popupAddcard);
+  openPopup(popupAddCard);
+  enableValidation({
+    formSelector: ".popup__form",
+    inputSelector: ".popup__field",
+    submitButtonSelector: ".popup__submit-button",
+    inactiveButtonClass: "popup__submit-button_disabled",
+    inputErrorClass: "popup__field_type_error",
+    errorClass: "popup__field-error_active",
+  });
 });
 
 //Слушатель закрытия модального окна при нажатии на кнопку или вне поля модального окна
-popupAddcard.addEventListener("click", (event) => {
-  if (
-    event.target.classList.contains("popup__close-button") ||
-    event.target.classList.contains("popup")
-  ) {
-    closePopup(popupAddcard);
-  }
+popupAddCard.addEventListener("click", (event) => {
+  closeButtonHandler(event, popupAddCard);
 });
 
 //Слушатель добавления карточки по нажатию кнопки в модальном окне
-formCardElement.addEventListener("submit", formSubmitCard);
+formCardElement.addEventListener("submit", addCardFromPopup);
 
 //Слушатель закрытия модального окна картинки при нажатии на кнопку или вне поля модального окна
 popupImgOpen.addEventListener("click", (event) => {
-  if (
-    event.target.classList.contains("popup__close-button") ||
-    event.target.classList.contains("popup")
-  ) {
-    closePopup(popupImgOpen);
-  }
+  closeButtonHandler(event, popupImgOpen);
 });
 
-//Слушатель закрытия модального окна нажатием клавиши Escape
-document.addEventListener('keydown', escHandler);
-
-
-//Функция валидации модальных окон
-enableValidation({
-  formSelector: '.popup__form',
-  inputSelector: '.popup__field',
-  submitButtonSelector: '.popup__submit-button',
-  inactiveButtonClass: 'popup__submit-button_disabled',
-  inputErrorClass: 'popup__field_type_error',
-  errorClass: 'popup__field-error_active'
-});

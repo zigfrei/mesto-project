@@ -1,3 +1,4 @@
+import { escHandler } from "../components/utils.js";
 //модальное окно редактирования профиля
 const popupMain = document.querySelector(".popup_theme_main");
 //кнопка редактирования профиля
@@ -11,30 +12,51 @@ const nameInput = document.querySelector("#author-name");
 //строка модального окна профессиональная деятельность
 const jobInput = document.querySelector("#profession");
 //форма модального окна профиля
-const formElement = popupMain.querySelector(".popup__form");
+const profileFormElement = popupMain.querySelector(".popup__form");
 
 //Функции открытия и закрытия модального окна
 function openPopup(popup) {
   popup.classList.add("popup_opened");
+  //Слушатель закрытия модального окна нажатием клавиши Escape
+  document.addEventListener("keydown", escHandler);
 }
 
 function closePopup(popup) {
   popup.classList.remove("popup_opened");
+  //Убрать слушатель закрытия модального окна нажатием клавиши Escape
+  document.removeEventListener("keydown", escHandler);
 }
 
 //Редактирование имени и информации о себе
+//Функция добавление информации из профиля в форму
+const addContentFromProfile = (content, input) => {
+  input.value = content.textContent;
+};
+
 //Функция добавления информации в профиль
 const addContentFromInput = (content, input) => {
   content.textContent = input.value;
-}
+};
 
 //Функция сохранения после нажатия кнопки
-function formSubmitHandler(evt) {
+function saveProfileFormInput(evt) {
   evt.preventDefault();
   addContentFromInput(profileTitleName, nameInput);
-  addContentFromInput(profileSubtitleName, jobInput)
+  addContentFromInput(profileSubtitleName, jobInput);
   closePopup(popupMain);
 }
 
-
-export {popupMain, editButton, openPopup, closePopup, profileTitleName, profileSubtitleName, nameInput, jobInput, formElement, addContentFromInput, formSubmitHandler};
+export {
+  popupMain,
+  editButton,
+  openPopup,
+  closePopup,
+  profileTitleName,
+  profileSubtitleName,
+  nameInput,
+  jobInput,
+  profileFormElement,
+  addContentFromInput,
+  saveProfileFormInput,
+  addContentFromProfile,
+};

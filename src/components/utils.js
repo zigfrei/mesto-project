@@ -1,19 +1,18 @@
-import {popupMain, closePopup} from '../components/modal.js';
-import {popupImgOpen, popupAddcard} from '../components/card.js';
+import { closePopup } from "../components/modal.js";
 //Функция закрытия модального окна при нажатии клавиши ESC
-function escHandler (event){
-  if (event.key === 'Escape'){
-    if(popupMain.classList.contains("popup_opened")){
-      closePopup(popupMain);
-    };
-    if(popupImgOpen.classList.contains("popup_opened")){
-      closePopup(popupImgOpen);
-    };
-    if(popupAddcard.classList.contains("popup_opened")){
-      closePopup(popupAddcard);
-    };
-  };
-};
-
-
-export {escHandler};
+function escHandler(event) {
+  if (event.key === "Escape") {
+    const openPopup = document.querySelector(".popup_opened");
+    closePopup(openPopup);
+  }
+}
+//Функция закрытия модального окна картинки при нажатии на кнопку или вне поля модального окна
+function closeButtonHandler(event, popup) {
+  if (
+    event.target.classList.contains("popup__close-button") ||
+    event.target.classList.contains("popup")
+  ) {
+    closePopup(popup);
+  }
+}
+export { escHandler, closeButtonHandler };
