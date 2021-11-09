@@ -1,4 +1,4 @@
-import {openPopup, closePopup} from '../components/modal.js';
+import { openPopup, closePopup } from "../components/modal.js";
 //Перечень всех карточек
 const cardsContainer = document.querySelector(".cards__list");
 //модально окно изображения
@@ -6,17 +6,9 @@ const popupImgOpen = document.querySelector(".popup_theme_img");
 //Кнопка добавления карточки
 const addCardButton = document.querySelector(".profile__add-button");
 //Модальное окно добавления карточки
-const popupAddcard = document.querySelector(".popup_theme_card");
+const popupAddCard = document.querySelector(".popup_theme_card");
 //Форма добавления карточки
-const formCardElement = popupAddcard.querySelector(".popup__form");
-
-//Картинки для Webpack
-// const Arhiz = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg", import.meta.url);
-// const Chelyabinsk = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg", import.meta.url);
-// const Ivanovo = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg", import.meta.url);
-// const Kamchatka = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg", import.meta.url);
-// const Kholmogorsky = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg", import.meta.url);
-// const Baikal = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg", import.meta.url);
+const formCardElement = popupAddCard.querySelector(".popup__form");
 
 //Функция создания карточки
 function createCard(cardNameValue, cardLinkValue) {
@@ -27,7 +19,6 @@ function createCard(cardNameValue, cardLinkValue) {
   const cardImgContainer = cardElement.querySelector(".cards__img");
 
   cardElement.querySelector(".cards__title").textContent = cardNameValue;
-  // cardImgContainer.src = `<%=require(${cardLinkValue})%>`;
   cardImgContainer.src = cardLinkValue;
   cardImgContainer.alt = cardNameValue;
   cardElement
@@ -44,18 +35,18 @@ function createCard(cardNameValue, cardLinkValue) {
   cardElement
     .querySelector(".cards__img")
     .addEventListener("click", function () {
-      addImgPopup(popupImgOpen, cardNameValue, cardLinkValue);
+      updateImgPopup(popupImgOpen, cardNameValue, cardLinkValue);
       openPopup(popupImgOpen);
     });
   return cardElement;
 }
 
 //Функция открытия модального окна картинки карточки
-function addImgPopup(popup, cardForPopup, imgLinkForPopup) {
+function updateImgPopup(popup, cardTitle, cardImage) {
   const imgPopupContainer = popup.querySelector(".popup__img");
-  imgPopupContainer.src = imgLinkForPopup;
-  imgPopupContainer.alt = cardForPopup;
-  popup.querySelector(".popup__caption").textContent = cardForPopup;
+  imgPopupContainer.src = cardImage;
+  imgPopupContainer.alt = cardTitle;
+  popup.querySelector(".popup__caption").textContent = cardTitle;
 }
 
 //функция добавления карточки в контейнер
@@ -64,16 +55,14 @@ function addCard(container, cardElementAdd) {
 }
 
 //Функция добавления карточки из модального окна
-function formSubmitCard(evt) {
+function addCardFromPopup(evt) {
   evt.preventDefault();
   const cardName = document.querySelector("#card-name");
   const cardLink = document.querySelector("#card-link");
   addCard(cardsContainer, createCard(cardName.value, cardLink.value));
-  cardName.closest("form").reset();
-  closePopup(popupAddcard);
+  formCardElement.reset();
+  closePopup(popupAddCard);
 }
-
-
 
 //Массив объектов карточек по заводу
 const initialCards = [
@@ -103,4 +92,14 @@ const initialCards = [
   },
 ];
 
-export {cardsContainer, createCard, popupImgOpen, addCard, initialCards, addCardButton, popupAddcard, formCardElement, formSubmitCard};
+export {
+  cardsContainer,
+  createCard,
+  popupImgOpen,
+  addCard,
+  initialCards,
+  addCardButton,
+  popupAddCard,
+  formCardElement,
+  addCardFromPopup,
+};
