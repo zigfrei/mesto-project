@@ -8,7 +8,7 @@ import {
   nameInput,
   jobInput,
   profileFormElement,
-  saveProfileFormInput,
+  submitProfileForm,
   addContentFromProfile,
 } from "./components/modal.js";
 import {
@@ -22,31 +22,23 @@ import {
   formCardElement,
   addCardFromPopup,
 } from "./components/card.js";
-import { closeButtonHandler } from "./components/utils.js";
-import { enableValidation } from "./components/validate.js";
+import { handleCloseButtonAndOverlayClick } from "./components/utils.js";
+import { enableValidation, disableSubmitButton } from "./components/validate.js";
 
 //Слушатель нажатия на кнопку редактора профиля
 editButton.addEventListener("click", () => {
   addContentFromProfile(profileTitleName, nameInput);
   addContentFromProfile(profileSubtitleName, jobInput);
   openPopup(popupMain);
-  enableValidation({
-    formSelector: ".popup__form",
-    inputSelector: ".popup__field",
-    submitButtonSelector: ".popup__submit-button",
-    inactiveButtonClass: "popup__submit-button_disabled",
-    inputErrorClass: "popup__field_type_error",
-    errorClass: "popup__field-error_active",
-  });
 });
 
 //Слушатель выхода из редактора профиля
 popupMain.addEventListener("click", (event) => {
-  closeButtonHandler(event, popupMain);
+  handleCloseButtonAndOverlayClick(event, popupMain);
 });
 
 //Слушатель сохранения изменений по нажатию кнопки в модальном окне
-profileFormElement.addEventListener("submit", saveProfileFormInput);
+profileFormElement.addEventListener("submit", submitProfileForm);
 
 //Инициализация набора карточек по заводу
 initialCards.forEach((element) => {
@@ -56,26 +48,29 @@ initialCards.forEach((element) => {
 //Слушатель нажатия на кнопку добавить карточку
 addCardButton.addEventListener("click", () => {
   openPopup(popupAddCard);
-  enableValidation({
-    formSelector: ".popup__form",
-    inputSelector: ".popup__field",
-    submitButtonSelector: ".popup__submit-button",
-    inactiveButtonClass: "popup__submit-button_disabled",
-    inputErrorClass: "popup__field_type_error",
-    errorClass: "popup__field-error_active",
-  });
 });
 
 //Слушатель закрытия модального окна при нажатии на кнопку или вне поля модального окна
 popupAddCard.addEventListener("click", (event) => {
-  closeButtonHandler(event, popupAddCard);
+  handleCloseButtonAndOverlayClick(event, popupAddCard);
 });
 
 //Слушатель добавления карточки по нажатию кнопки в модальном окне
-formCardElement.addEventListener("submit", addCardFromPopup);
+formCardElement.addEventListener("submit", (event)=>{
+  addCardFromPopup(event);
+  disableSubmitButton(formCardElement);
+});
 
 //Слушатель закрытия модального окна картинки при нажатии на кнопку или вне поля модального окна
 popupImgOpen.addEventListener("click", (event) => {
-  closeButtonHandler(event, popupImgOpen);
+  handleCloseButtonAndOverlayClick(event, popupImgOpen);
 });
 
+enableValidation({
+  formSelector: ".popup__form",
+  inputSelector: ".popup__field",
+  submitButtonSelector: ".popup__submit-button",
+  inactiveButtonClass: "popup__submit-button_disabled",
+  inputErrorClass: "popup__field_type_error",
+  errorClass: "popup__field-error_active",
+});
