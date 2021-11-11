@@ -39,7 +39,7 @@ const addContentFromInput = (content, input) => {
 };
 
 //Функция сохранения после нажатия кнопки
-function saveProfileFormInput(evt) {
+function submitProfileForm(evt) {
   evt.preventDefault();
   addContentFromInput(profileTitleName, nameInput);
   addContentFromInput(profileSubtitleName, jobInput);
@@ -57,6 +57,6 @@ export {
   jobInput,
   profileFormElement,
   addContentFromInput,
-  saveProfileFormInput,
+  submitProfileForm,
   addContentFromProfile,
 };

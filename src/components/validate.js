@@ -31,6 +31,11 @@ const hasInvalidInput = (inputList) => {
   });
 };
 
+const disableSubmitButton = (formElement)=>{
+const buttonElement = formElement.querySelector(".popup__submit-button");
+buttonElement.classList.add("popup__submit-button_disabled");
+};
+
 const toggleButtonState = (inputList, buttonElement, config) => {
   if (hasInvalidInput(inputList)) {
     buttonElement.classList.add(config.inactiveButtonClass);
@@ -39,9 +44,14 @@ const toggleButtonState = (inputList, buttonElement, config) => {
   }
 };
 
-const setEventListeners = (formElement, formInput, formSubmit, config) => {
-  const inputList = Array.from(formElement.querySelectorAll(formInput));
-  const buttonElement = formElement.querySelector(formSubmit);
+const setEventListeners = (
+  formElement,
+  inputSelector,
+  submitButtonSelector,
+  config
+) => {
+  const inputList = Array.from(formElement.querySelectorAll(inputSelector));
+  const buttonElement = formElement.querySelector(submitButtonSelector);
   toggleButtonState(inputList, buttonElement, config);
   inputList.forEach((inputElement) => {
     inputElement.addEventListener("input", function () {
@@ -66,4 +76,4 @@ const enableValidation = (config) => {
   });
 };
 
-export { enableValidation };
+export { enableValidation, disableSubmitButton };
