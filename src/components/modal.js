@@ -7,6 +7,8 @@ const editButton = document.querySelector(".profile__edit-button");
 const profileTitleName = document.querySelector(".profile__title");
 //строка профиля профессиональная деятельность
 const profileSubtitleName = document.querySelector(".profile__subtitle");
+//аватар профиля
+const profileAvatar = document.querySelector(".profile__avatar");
 //строка модального окна Имя
 const nameInput = document.querySelector("#author-name");
 //строка модального окна профессиональная деятельность
@@ -38,6 +40,13 @@ const addContentFromInput = (content, input) => {
   content.textContent = input.value;
 };
 
+//Функция добавления информации в профиль с массива сервера
+const addContentFromArr = (profileName, profileAbout, profileAvatar, arr) => {
+  profileName.textContent = arr.name;
+  profileAbout.textContent = arr.about;
+  profileAvatar.src = arr.avatar;
+};
+
 //Функция сохранения после нажатия кнопки
 function submitProfileForm(evt) {
   evt.preventDefault();
@@ -59,4 +68,6 @@ export {
   addContentFromInput,
   submitProfileForm,
   addContentFromProfile,
+  addContentFromArr,
+  profileAvatar,
 };

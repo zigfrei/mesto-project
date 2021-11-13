@@ -24,6 +24,7 @@ import {
 } from "./components/card.js";
 import { handleCloseButtonAndOverlayClick } from "./components/utils.js";
 import { enableValidation, disableSubmitButton } from "./components/validate.js";
+import {config, getInitialCards, getUserProfile } from "./components/api.js";
 
 //Слушатель нажатия на кнопку редактора профиля
 editButton.addEventListener("click", () => {
@@ -41,9 +42,9 @@ popupMain.addEventListener("click", (event) => {
 profileFormElement.addEventListener("submit", submitProfileForm);
 
 //Инициализация набора карточек по заводу
-initialCards.forEach((element) => {
-  addCard(cardsContainer, createCard(element.name, element.link));
-});
+// initialCards.forEach((element) => {
+//   addCard(cardsContainer, createCard(element.name, element.link));
+// });
 
 //Слушатель нажатия на кнопку добавить карточку
 addCardButton.addEventListener("click", () => {
@@ -74,3 +75,7 @@ enableValidation({
   inputErrorClass: "popup__field_type_error",
   errorClass: "popup__field-error_active",
 });
+
+
+getInitialCards();
+getUserProfile();
