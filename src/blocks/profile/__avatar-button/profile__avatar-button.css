@@ -1,0 +1,37 @@
+.profile__avatar-button {
+  all:unset;
+  display: block;
+  position: relative;
+}
+
+.profile__avatar-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+.profile__avatar-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url(../../../images/profile/pen.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+.profile__avatar-button:hover::after,
+.profile__avatar-button:hover::before {
+  opacity: 1;
+  transition: opacity 1s;
+}

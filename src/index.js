@@ -3,28 +3,37 @@ import {
   popupMain,
   editButton,
   openPopup,
+  closePopup,
   profileTitleName,
   profileSubtitleName,
   nameInput,
   jobInput,
   profileFormElement,
-  submitProfileForm,
   addContentFromProfile,
+  submitProfilePatch,
+  popupAvatar,
+  addAvatarButton,
+  addAvatarForm,
+  renderLoading,
 } from "./components/modal.js";
 import {
-  cardsContainer,
-  createCard,
   popupImgOpen,
-  addCard,
-  initialCards,
   addCardButton,
   popupAddCard,
   formCardElement,
   addCardFromPopup,
 } from "./components/card.js";
 import { handleCloseButtonAndOverlayClick } from "./components/utils.js";
-import { enableValidation, disableSubmitButton } from "./components/validate.js";
-import {config, getInitialCards, getUserProfile } from "./components/api.js";
+import {
+  enableValidation,
+  disableSubmitButton,
+} from "./components/validate.js";
+import {
+  config,
+  getInitialCards,
+  getUserProfile,
+  patchAvatar,
+} from "./components/api.js";
 
 //Слушатель нажатия на кнопку редактора профиля
 editButton.addEventListener("click", () => {
@@ -33,20 +42,33 @@ editButton.addEventListener("click", () => {
   openPopup(popupMain);
 });
 
+//слушатель нажатия на кнопку добавления аватара
+addAvatarButton.addEventListener("click", () => {
+  openPopup(popupAvatar);
+});
+
+//Слушатель закрытия модалього окна добавления аватара
+popupAvatar.addEventListener("click", (event) => {
+  handleCloseButtonAndOverlayClick(event, popupAvatar);
+});
+
+//Слушатель добавления нового аватара по нажатию кнопки в модальном окне
+addAvatarForm.addEventListener("submit", (event) => {
+  renderLoading(true, popupAvatar);
+  patchAvatar();
+  closePopup(popupAvatar);
+  disableSubmitButton(addAvatarForm);
+});
+
 //Слушатель выхода из редактора профиля
 popupMain.addEventListener("click", (event) => {
   handleCloseButtonAndOverlayClick(event, popupMain);
 });
 
-//Слушатель сохранения изменений по нажатию кнопки в модальном окне
-profileFormElement.addEventListener("submit", submitProfileForm);
+//Слушатель сохранения изменений в профиле по нажатию кнопки в модальном окне
+profileFormElement.addEventListener("submit", submitProfilePatch);
 
-//Инициализация набора карточек по заводу
-// initialCards.forEach((element) => {
-//   addCard(cardsContainer, createCard(element.name, element.link));
-// });
-
-//Слушатель нажатия на кнопку добавить карточку
+//Слушатель нажатия на кнопку для открытия модального окна "добавить карточку"
 addCardButton.addEventListener("click", () => {
   openPopup(popupAddCard);
 });
@@ -57,7 +79,7 @@ popupAddCard.addEventListener("click", (event) => {
 });
 
 //Слушатель добавления карточки по нажатию кнопки в модальном окне
-formCardElement.addEventListener("submit", (event)=>{
+formCardElement.addEventListener("submit", (event) => {
   addCardFromPopup(event);
   disableSubmitButton(formCardElement);
 });
@@ -75,7 +97,6 @@ enableValidation({
   inputErrorClass: "popup__field_type_error",
   errorClass: "popup__field-error_active",
 });
-
 
 getInitialCards();
 getUserProfile();

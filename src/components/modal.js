@@ -1,3 +1,4 @@
+import { patchProfile } from "./api.js";
 import { escHandler } from "../components/utils.js";
 //модальное окно редактирования профиля
 const popupMain = document.querySelector(".popup_theme_main");
@@ -15,6 +16,24 @@ const nameInput = document.querySelector("#author-name");
 const jobInput = document.querySelector("#profession");
 //форма модального окна профиля
 const profileFormElement = popupMain.querySelector(".popup__form");
+//модальное окно добавления аватара
+const popupAvatar = document.querySelector(".popup_theme_avatar");
+//Кнопка добавления нового аватара
+const addAvatarButton = document.querySelector(".profile__avatar-button");
+//форма модального окна добавления нового аватара
+const addAvatarForm = popupAvatar.querySelector(".popup__form");
+//Строка ввода ссылки на новый аватар
+const avatarLink = document.querySelector("#avatar-link");
+
+const renderLoading = (isLoading, popupElement) => {
+  if (isLoading) {
+    popupElement.querySelector(".popup__submit-button").textContent =
+      "Сохранение...";
+  } else {
+    popupElement.querySelector(".popup__submit-button").textContent =
+      "Сохранить";
+  }
+};
 
 //Функции открытия и закрытия модального окна
 function openPopup(popup) {
@@ -41,17 +60,22 @@ const addContentFromInput = (content, input) => {
 };
 
 //Функция добавления информации в профиль с массива сервера
-const addContentFromArr = (profileName, profileAbout, profileAvatar, arr) => {
-  profileName.textContent = arr.name;
-  profileAbout.textContent = arr.about;
-  profileAvatar.src = arr.avatar;
+const addContentFromArr = (
+  profileName,
+  profileAbout,
+  profileAvatar,
+  serverArr
+) => {
+  profileName.textContent = serverArr.name;
+  profileAbout.textContent = serverArr.about;
+  profileAvatar.src = serverArr.avatar;
 };
 
-//Функция сохранения после нажатия кнопки
-function submitProfileForm(evt) {
+//Функция сохранения профиля на сервере после нажатия кнопки
+function submitProfilePatch(evt) {
   evt.preventDefault();
-  addContentFromInput(profileTitleName, nameInput);
-  addContentFromInput(profileSubtitleName, jobInput);
+  renderLoading(true, popupMain);
+  patchProfile();
   closePopup(popupMain);
 }
 
@@ -66,8 +90,13 @@ export {
   jobInput,
   profileFormElement,
   addContentFromInput,
-  submitProfileForm,
   addContentFromProfile,
   addContentFromArr,
   profileAvatar,
+  submitProfilePatch,
+  popupAvatar,
+  addAvatarButton,
+  addAvatarForm,
+  avatarLink,
+  renderLoading,
 };

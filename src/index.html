@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- <link rel="stylesheet" href="./pages/index.css"> -->
   <title>Mesto</title>
 </head>
 
@@ -18,13 +17,15 @@
         <h2 class="popup__title">Редактировать профиль</h2>
         <form name="submit-form" class="popup__form" action="#" method="POST" novalidate>
           <label class="popup__field-wrapper">
-          <input required minlength="2" maxlength="40" type="text" id="author-name" name="author-name" class="popup__field" placeholder="Имя" value="Имя">
-          <span class="popup__field-error popup__field-error_active author-name-error"></span>
+            <input required minlength="2" maxlength="40" type="text" id="author-name" name="author-name"
+              class="popup__field" placeholder="Имя" value="Имя">
+            <span class="popup__field-error popup__field-error_active author-name-error"></span>
           </label>
           <label class="popup__field-wrapper">
-          <input required minlength="2" maxlength="200" type="text" id="profession" name="profession" class="popup__field" placeholder="Профессиональная деятельность" value="Профессиональная деятельность">
-          <span class="popup__field-error popup__field-error_active profession-error"></span>
-        </label>
+            <input required minlength="2" maxlength="200" type="text" id="profession" name="profession"
+              class="popup__field" placeholder="Профессиональная деятельность" value="Профессиональная деятельность">
+            <span class="popup__field-error popup__field-error_active profession-error"></span>
+          </label>
           <button type="submit" class="popup__submit-button">Сохранить</button>
         </form>
         <button type="button" aria-label="Закрыть" class="popup__close-button"></button>
@@ -36,14 +37,31 @@
         <h2 class="popup__title">Новое место</h2>
         <form name="submit-form" class="popup__form" action="#" method="POST" novalidate>
           <label class="popup__field-wrapper">
-          <input required minlength="2" maxlength="30" type="text" id="card-name" name="card-name" class="popup__field" placeholder="Название">
-          <span class="popup__field-error card-name-error"></span>
+            <input required minlength="2" maxlength="30" type="text" id="card-name" name="card-name"
+              class="popup__field" placeholder="Название">
+            <span class="popup__field-error card-name-error"></span>
           </label>
           <label class="popup__field-wrapper">
-          <input required type="url" id="card-link" name="card-link" class="popup__field " placeholder="Ссылка на картинку">
-          <span class="popup__field-error card-link-error"></span>
+            <input required type="url" id="card-link" name="card-link" class="popup__field"
+              placeholder="Ссылка на картинку">
+            <span class="popup__field-error card-link-error"></span>
           </label>
           <button type="submit" class="popup__submit-button">Создать</button>
+        </form>
+        <button type="button" aria-label="Закрыть" class="popup__close-button"></button>
+      </div>
+    </section>
+
+    <section class="popup popup_theme_avatar">
+      <div class="popup__container popup__container_theme_avatar">
+        <h2 class="popup__title">Обновить аватар</h2>
+        <form name="submit-form" class="popup__form" action="#" method="POST" novalidate>
+          <label class="popup__field-wrapper">
+            <input required type="url" id="avatar-link" name="avatar-link" class="popup__field"
+              placeholder="Ссылка на новый аватар">
+            <span class="popup__field-error avatar-link-error"></span>
+          </label>
+          <button type="submit" class="popup__submit-button">Сохранить</button>
         </form>
         <button type="button" aria-label="Закрыть" class="popup__close-button"></button>
       </div>
@@ -66,7 +84,9 @@
 
       <section class="profile main__profile">
         <div class="profile__content">
-          <img src="<%=require("./images/profile/image.jpg")%>" alt="Фото владельца профиля" class="profile__avatar">
+          <button type="button" aria-label="Редактировать аватар" class="profile__avatar-button">
+            <img src="" alt="Фото владельца профиля" class="profile__avatar">
+          </button>
           <div class="profile__info">
             <h1 class="profile__title">Жак-Ив Кусто</h1>
             <p class="profile__subtitle">Исследователь океана</p>
@@ -96,12 +116,15 @@
       <img src="#" alt="#" class="cards__img">
       <div class="cards__footer">
         <p class="cards__title"></p>
-        <button type="button" aria-label="Лайкнуть" class="cards__like-button"></button>
+        <div class="cards__like"><button type="button" aria-label="Лайкнуть" class="cards__like-button"></button>
+          <label class="cards__like-counter" for="">0</label>
+        </div>
+
       </div>
     </li>
   </template>
 
-  <!-- <script type="module" src="./index.js"></script> -->
+
 </body>
 
 </html>
