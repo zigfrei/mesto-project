@@ -31,9 +31,9 @@ const hasInvalidInput = (inputList) => {
   });
 };
 
-const disableSubmitButton = (formElement)=>{
-const buttonElement = formElement.querySelector(".popup__submit-button");
-buttonElement.classList.add("popup__submit-button_disabled");
+const disableSubmitButton = (formElement) => {
+  const buttonElement = formElement.querySelector(".popup__submit-button");
+  buttonElement.classList.add("popup__submit-button_disabled");
 };
 
 const toggleButtonState = (inputList, buttonElement, config) => {
