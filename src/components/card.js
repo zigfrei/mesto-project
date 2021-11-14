@@ -3,8 +3,8 @@ import { openPopup } from "../components/modal.js";
 import { addLike, deleteLike, removeCard } from "./api.js";
 
 //Функция проверки проставления лайка на карточке
-const controlLikes = (arrLikesElement) => {
-  return arrLikesElement.some((el) => el.name == profileTitleName.textContent);
+const controlLikes = (arrLikesElement, profileId) => {
+  return arrLikesElement.some((el) => el._id == profileId);
 };
 
 //Функция создания карточки
@@ -23,7 +23,7 @@ function createCard(cardObject, profileId) {
   cardImgContainer.src = cardObject.link;
   cardImgContainer.alt = cardObject.name;
   //проставить лайки где раньше ставил
-  if (controlLikes(cardObject.likes)) {
+  if (controlLikes(cardObject.likes, profileId)) {
     cardLikeButton.classList.add("cards__like-button_status_active");
   }
 

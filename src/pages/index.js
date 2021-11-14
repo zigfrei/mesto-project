@@ -185,7 +185,7 @@ enableValidation({
 Promise.all([getInitialCards(), getUserProfile()])
   .then(([cardsData, userInfo]) => {
     cardsData.forEach((element) => {
-      addCard(cardsContainer, createCard(element, profileId));
+      addCard(cardsContainer, createCard(element, userInfo._id));
     });
     addContentFromArr(
       profileTitleName,
