@@ -1,24 +1,10 @@
 import {
-  cardsContainer,
-  createCard,
-  addCard,
-  cardName,
-  cardLink,
-  popupAddCard,
-} from "./card.js";
-
-import {
-  popupMain,
-  profileTitleName,
-  profileSubtitleName,
-  addContentFromArr,
-  profileAvatar,
   nameInput,
   jobInput,
   avatarLink,
-  renderLoading,
-  popupAvatar,
-} from "./modal.js";
+  cardName,
+  cardLink,
+} from "./constants.js";
 
 const config = {
   baseUrl: "https://nomoreparties.co/v1/plus-cohort-3",
@@ -28,192 +14,85 @@ const config = {
   },
 };
 
+//Код проверки запроса на корректность
+const checkForBugs = (res) => {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Ошибка: ${res.status}`);
+};
 
-//Получение данных профиля с сервера
+//Получение данных профиля с сервера +
 const getUserProfile = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
-  })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((data) => {
-      addContentFromArr(
-        profileTitleName,
-        profileSubtitleName,
-        profileAvatar,
-        data
-      );
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  }).then((res) => checkForBugs(res));
 };
 
-//Получение набора карточек с сервера
+//Получение набора карточек с сервера +
 const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
-  })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка!!!: ${res.status}`);
-    })
-    .then((data) => {
-      data.forEach((element) => {
-        addCard(cardsContainer, createCard(element));
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  }).then((res) => checkForBugs(res));
 };
 
-//Функция замены данных профиля на сервере
+//Функция замены данных профиля на сервере +
 const patchProfile = () => {
-  fetch(`${config.baseUrl}/users/me`, {
+  return fetch(`${config.baseUrl}/users/me`, {
     method: "PATCH",
     headers: config.headers,
     body: JSON.stringify({
       name: nameInput.value,
       about: jobInput.value,
     }),
-  })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((data) => {
-      addContentFromArr(
-        profileTitleName,
-        profileSubtitleName,
-        profileAvatar,
-        data
-      );
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      renderLoading(false, popupMain);
-    });
+  }).then((res) => checkForBugs(res));
 };
 
-//Функция удаления мной созданной карточки
+//Функция удаления мной созданной карточки +
 const removeCard = (cardId) => {
-  fetch(`${config.baseUrl}/cards/${cardId}`, {
+  return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: "DELETE",
     headers: config.headers,
-  })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  }).then((res) => checkForBugs(res));
 };
 
-//Функция поставить лайк
+//Функция поставить лайк +
 const addLike = (cardId, cardLikeCounter) => {
-  fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: "PUT",
     headers: config.headers,
-  })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((data) => {
-      return (cardLikeCounter.textContent = data.likes.length);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  }).then((res) => checkForBugs(res));
 };
 
-//Функция убрать лайк
+//Функция убрать лайк +
 const deleteLike = (cardId, cardLikeCounter) => {
-  fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: "DELETE",
     headers: config.headers,
-  })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((data) => {
-      return (cardLikeCounter.textContent = data.likes.length);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  }).then((res) => checkForBugs(res));
 };
 
-//Функция замены аватара профиля
+//Функция замены аватара профиля +
 const patchAvatar = () => {
-  fetch(`${config.baseUrl}/users/me/avatar`, {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: "PATCH",
     headers: config.headers,
     body: JSON.stringify({
       avatar: avatarLink.value,
     }),
-  })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((data) => {
-      profileAvatar.src = data.avatar;
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      renderLoading(false, popupAvatar);
-    });
+  }).then((res) => checkForBugs(res));
 };
 
-//Функция отправки карточки на сервер
+//Функция отправки карточки на сервер +
 const postCard = () => {
-  fetch(`${config.baseUrl}/cards`, {
+  return fetch(`${config.baseUrl}/cards`, {
     method: "POST",
     headers: config.headers,
     body: JSON.stringify({
       name: cardName.value,
       link: cardLink.value,
     }),
-  })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((data) => {
-      addCard(cardsContainer, createCard(data));
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      renderLoading(false, popupAddCard);
-    });
+  }).then((res) => checkForBugs(res));
 };
 
 export {

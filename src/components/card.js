@@ -1,24 +1,6 @@
-import {
-  openPopup,
-  closePopup,
-  profileTitleName,
-  renderLoading,
-} from "../components/modal.js";
-import { postCard, addLike, deleteLike, removeCard } from "./api.js";
-//Перечень всех карточек
-const cardsContainer = document.querySelector(".cards__list");
-//Строка ввода названия карточки в попапе
-const cardName = document.querySelector("#card-name");
-//Строка ввода ссылки на картинку карточки в попапе
-const cardLink = document.querySelector("#card-link");
-//модально окно изображения
-const popupImgOpen = document.querySelector(".popup_theme_img");
-//Кнопка добавления карточки
-const addCardButton = document.querySelector(".profile__add-button");
-//Модальное окно добавления карточки
-const popupAddCard = document.querySelector(".popup_theme_card");
-//Форма добавления карточки
-const formCardElement = popupAddCard.querySelector(".popup__form");
+import { profileTitleName, popupImgOpen } from "./constants.js";
+import { openPopup } from "../components/modal.js";
+import { addLike, deleteLike, removeCard } from "./api.js";
 
 //Функция проверки проставления лайка на карточке
 const controlLikes = (arrLikesElement) => {
@@ -26,7 +8,7 @@ const controlLikes = (arrLikesElement) => {
 };
 
 //Функция создания карточки
-function createCard(cardObject) {
+function createCard(cardObject, profileId) {
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate
     .querySelector(".cards__body")
@@ -45,22 +27,41 @@ function createCard(cardObject) {
     cardLikeButton.classList.add("cards__like-button_status_active");
   }
 
+  //Слушатель проставления изменения состояния лайка по нажатию
   cardLikeButton.addEventListener("click", function (evt) {
     if (!evt.target.classList.contains("cards__like-button_status_active")) {
-      addLike(cardObject._id, cardLikeCounter);
+      addLike(cardObject._id, cardLikeCounter)
+        .then((data) => {
+          evt.target.classList.toggle("cards__like-button_status_active");
+          return (cardLikeCounter.textContent = data.likes.length);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
-      deleteLike(cardObject._id, cardLikeCounter);
+      deleteLike(cardObject._id, cardLikeCounter)
+        .then((data) => {
+          evt.target.classList.toggle("cards__like-button_status_active");
+          return (cardLikeCounter.textContent = data.likes.length);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-    evt.target.classList.toggle("cards__like-button_status_active");
   });
 
-  if (cardObject.owner.name == profileTitleName.textContent) {
+  //Скрываем кнопку удаления карточки если не мы ее создатели
+  if (cardObject.owner._id == profileId) {
     cardRemoveButton.style.display = "block";
   }
 
+  //Слушатель удаления карточки по клику на кнопку
   cardRemoveButton.addEventListener("click", function (evt) {
-    removeCard(cardObject._id);
-    cardElement.remove();
+    removeCard(cardObject._id)
+      .then(() => cardElement.remove())
+      .catch((err) => {
+        console.log(err);
+      });
   });
 
   cardElement
@@ -80,29 +81,4 @@ function updateImgPopup(popup, cardTitle, cardImage) {
   popup.querySelector(".popup__caption").textContent = cardTitle;
 }
 
-//функция добавления карточки в контейнер
-function addCard(container, cardElementAdd) {
-  container.prepend(cardElementAdd);
-}
-
-//Функция добавления карточки из модального окна
-function addCardFromPopup(evt) {
-  evt.preventDefault();
-  renderLoading(true, popupAddCard);
-  postCard();
-  formCardElement.reset();
-  closePopup(popupAddCard);
-}
-
-export {
-  cardsContainer,
-  createCard,
-  popupImgOpen,
-  addCard,
-  addCardButton,
-  popupAddCard,
-  formCardElement,
-  addCardFromPopup,
-  cardName,
-  cardLink,
-};
+export { createCard };
