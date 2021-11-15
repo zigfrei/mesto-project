@@ -1,14 +1,24 @@
 import { profileTitleName, popupImgOpen } from "./constants.js";
 import { openPopup } from "../components/modal.js";
-import { addLike, deleteLike, removeCard } from "./api.js";
 
 //Функция проверки проставления лайка на карточке
 const controlLikes = (arrLikesElement, profileId) => {
   return arrLikesElement.some((el) => el._id == profileId);
 };
 
+//Функция удаления карточки
+function deleteCard(cardElement) {
+  cardElement.remove();
+  cardElement = null;
+}
+
+function toggleLikeCard(likeElement, cardLikeCounter, cardArray) {
+  likeElement.classList.toggle("cards__like-button_status_active");
+  return (cardLikeCounter.textContent = cardArray.likes.length);
+}
+
 //Функция создания карточки
-function createCard(cardObject, profileId) {
+function createCard(cardObject, profileId, handleDeleteButton, handleLikeCard) {
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate
     .querySelector(".cards__body")
@@ -29,25 +39,7 @@ function createCard(cardObject, profileId) {
 
   //Слушатель проставления изменения состояния лайка по нажатию
   cardLikeButton.addEventListener("click", function (evt) {
-    if (!evt.target.classList.contains("cards__like-button_status_active")) {
-      addLike(cardObject._id, cardLikeCounter)
-        .then((data) => {
-          evt.target.classList.toggle("cards__like-button_status_active");
-          return (cardLikeCounter.textContent = data.likes.length);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      deleteLike(cardObject._id, cardLikeCounter)
-        .then((data) => {
-          evt.target.classList.toggle("cards__like-button_status_active");
-          return (cardLikeCounter.textContent = data.likes.length);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    handleLikeCard(evt.target, cardObject._id, cardLikeCounter);
   });
 
   //Скрываем кнопку удаления карточки если не мы ее создатели
@@ -57,11 +49,7 @@ function createCard(cardObject, profileId) {
 
   //Слушатель удаления карточки по клику на кнопку
   cardRemoveButton.addEventListener("click", function (evt) {
-    removeCard(cardObject._id)
-      .then(() => cardElement.remove())
-      .catch((err) => {
-        console.log(err);
-      });
+    handleDeleteButton(cardElement, cardObject._id);
   });
 
   cardElement
@@ -81,4 +69,6 @@ function updateImgPopup(popup, cardTitle, cardImage) {
   popup.querySelector(".popup__caption").textContent = cardTitle;
 }
 
-export { createCard };
+export { createCard, deleteCard, toggleLikeCard };
+
+
