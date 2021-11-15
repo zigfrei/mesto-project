@@ -18,7 +18,7 @@ import {
   formCardElement,
 } from "../components/constants.js";
 import { openPopup, closePopup } from "../components/modal.js";
-import { createCard } from "../components/card.js";
+import { createCard, deleteCard, toggleLikeCard } from "../components/card.js";
 import { handleCloseButtonAndOverlayClick } from "../components/utils.js";
 import {
   enableValidation,
@@ -30,7 +30,40 @@ import {
   patchAvatar,
   postCard,
   patchProfile,
+  removeCard,
+  addLike,
+  deleteLike,
 } from "../components/api.js";
+
+//Обработчик для удаления карточки
+function handleRemoveCard(cardElement, cardId) {
+  removeCard(cardId)
+    .then(() => deleteCard(cardElement))
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+//Обработчик для лайка карточки
+function handleLikeCard(cardElement, cardId, cardLikeCounter) {
+  if (!cardElement.classList.contains("cards__like-button_status_active")) {
+    addLike(cardId, cardLikeCounter)
+      .then((data) => {
+        toggleLikeCard(cardElement, cardLikeCounter, data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } else {
+    deleteLike(cardId, cardLikeCounter)
+      .then((data) => {
+        toggleLikeCard(cardElement, cardLikeCounter, data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+}
 
 //индивидуальный номер профиля
 let profileId = 0;
@@ -75,7 +108,10 @@ function addCardFromPopup(evt) {
   renderLoading(true, popupAddCard);
   postCard()
     .then((data) => {
-      addCard(cardsContainer, createCard(data, profileId));
+      addCard(
+        cardsContainer,
+        createCard(data, profileId, handleRemoveCard, handleLikeCard)
+      );
       closePopup(popupAddCard);
     })
     .catch((err) => {
@@ -185,7 +221,10 @@ enableValidation({
 Promise.all([getInitialCards(), getUserProfile()])
   .then(([cardsData, userInfo]) => {
     cardsData.forEach((element) => {
-      addCard(cardsContainer, createCard(element, userInfo._id));
+      addCard(
+        cardsContainer,
+        createCard(element, userInfo._id, handleRemoveCard, handleLikeCard)
+      );
     });
     addContentFromArr(
       profileTitleName,

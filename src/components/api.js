@@ -48,7 +48,7 @@ const patchProfile = () => {
   }).then((res) => checkForBugs(res));
 };
 
-//Функция удаления мной созданной карточки +
+//Функция удаления мной созданной карточки + +
 const removeCard = (cardId) => {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: "DELETE",
