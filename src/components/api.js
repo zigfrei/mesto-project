@@ -14,6 +14,58 @@ const config = {
   },
 };
 
+//Класс Api
+class Api{
+  constructor({baseUrl, headers}){
+    this._baseUrl = baseUrl;
+    this._headers = headers;
+  }
+
+//Проверка ответа от сервера на корректность
+checkForBugs(res) {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Ошибка: ${res.status}`);
+};
+
+//Получение данных профиля с сервера +
+getUserProfile() {
+  return fetch(`${this._baseUrl}/users/me`, {
+    headers: this._headers,
+  }).then((res) => checkForBugs(res));
+};
+
+//Получение набора карточек с сервера
+getInitialCards() {
+  return fetch(`${this._baseUrl}/cards`, {
+    headers: this._headers,
+  }).then((res) => checkForBugs(res));
+};
+
+//Функция замены данных профиля на сервере
+patchProfile() {
+  return fetch(`${this._baseUrl}/users/me`, {
+    method: "PATCH",
+    headers: this._headers,
+    body: JSON.stringify({
+      name: nameInput.value,
+      about: jobInput.value,
+    }),
+  }).then((res) => checkForBugs(res));
+};
+
+//Функция удаления мной созданной карточки
+removeCard (cardId) {
+  return fetch(`${this._baseUrl}/cards/${cardId}`, {
+    method: "DELETE",
+    headers: this._headers,
+  }).then((res) => checkForBugs(res));
+};
+
+}
+
+
 //Код проверки запроса на корректность
 const checkForBugs = (res) => {
   if (res.ok) {
@@ -22,21 +74,21 @@ const checkForBugs = (res) => {
   return Promise.reject(`Ошибка: ${res.status}`);
 };
 
-//Получение данных профиля с сервера +
+//Получение данных профиля с сервера
 const getUserProfile = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
   }).then((res) => checkForBugs(res));
 };
 
-//Получение набора карточек с сервера +
+//Получение набора карточек с сервера
 const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
   }).then((res) => checkForBugs(res));
 };
 
-//Функция замены данных профиля на сервере +
+//Функция замены данных профиля на сервере
 const patchProfile = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: "PATCH",
@@ -48,7 +100,7 @@ const patchProfile = () => {
   }).then((res) => checkForBugs(res));
 };
 
-//Функция удаления мной созданной карточки + +
+//Функция удаления мной созданной карточки
 const removeCard = (cardId) => {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: "DELETE",
