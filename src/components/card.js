@@ -1,14 +1,13 @@
 import { profileTitleName, popupImgOpen } from "./constants.js";
 import { openPopup } from "../components/modal.js";
 
-this._handleFormSubmit = handleFormSubmit;
 
 export default class Card {
-  constructor (cardObject, profileId, selector, popupImgRender){
+  constructor (cardObject, profileId, selector, {handleCardClick}){
     this.cardObject = cardObject;
     this._selector  = selector;
     this.profileId = profileId;
-    this.popupImgRender = popupImgRender;
+    this.handleCardClick = handleCardClick;
   }
   _getElement() {
     const cardTemplate = document
@@ -29,43 +28,38 @@ export default class Card {
   controlLikes(arrLikesElement, profileId){
     return arrLikesElement.some((el) => el == profileId); ///добавить ид
   };
-  
+
   _cardSettings(card){
     this.card.cardImgContainer.src = this.cardObject.link;
     console.log(this.cardElement);
     this.card.cardImgContainer.alt = this.cardObject.name;
     card.cardTitle.textContent = this.cardObject.name;
     card.cardLikeCounter.textContent = this.cardObject.likes.length;
- 
+
     //  проставить лайки где раньше ставил
   if (this.controlLikes(this.cardObject.likes, this.profileId)) {
     cardElement.cardLikeButton.classList.add("cards__like-button_status_active");
   }
   }
-  
+
   _addListeners(card){
-    // слушатель лайка
+    // слушатель лайка при клике
     card.cardLikeButton.addEventListener("click", function (evt) {
       handleLikeCard(evt.target, this.cardObject._id, card.cardLikeCounter);
     });
-    // слушатель удаления 
+    // слушатель удаления при клике
     card.cardRemoveButton.addEventListener("click", function (evt) {
       handleDeleteButton(card, this.cardObject._id);
     });
-    // слушатель открытия модального окна
-    card.cardImgContainer
-    .addEventListener("click", function () {
-      this.popupImgRender();
-      //метод  из конструктора
-      // updateImgPopup(popupImgOpen, this.cardObject.name, this.cardObject.link);
-      // openPopup(popupImgOpen);
+    // слушатель открытия модального окна при клике на картинку
+    card.cardImgContainer.addEventListener("click", function () {
+      this.handleCardClick(this.cardObject.name, this.cardObject.link);
     });
-  
 }
-  }
 
 
-  
+
+
   createCard(){
     const cardElement = this._getElement();
     this._cardSettings(cardElement);

@@ -47,15 +47,21 @@ const cardObject = {
   owner: 'owner',
   likes: [111, 222]
 };
+
+function handleCardClick(cardImage, cardTitle) {
+  const imgPopupContainer = popupImgOpen.querySelector(".popup__img");
+  imgPopupContainer.src = cardImage;
+  imgPopupContainer.alt = cardTitle;
+  popupImgOpen.querySelector(".popup__caption").textContent = cardTitle;
+  openPopup(popupImgOpen);
+};
+
+
+
 const profileId = 111;
 const selector = "#card-template";
-const card = new Card(cardObject, profileId, selector, {popupImgRender: ( ) => {
-    updateImgPopup(popupImgOpen, this.cardObject.name, this.cardObject.link);
-    openPopup(popupImgOpen);
-  },
-}
-  );
-card.cardSettings();
+const card = new Card(cardObject, profileId, selector, handleCardClick);
+
 
 
 
