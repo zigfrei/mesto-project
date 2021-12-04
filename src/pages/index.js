@@ -16,6 +16,9 @@ import {
   addCardButton,
   popupAddCard,
   formCardElement,
+  avatarLink,
+  cardName,
+  cardLink,
 } from "../components/constants.js";
 import { openPopup, closePopup } from "../components/modal.js";
 import { createCard, deleteCard, toggleLikeCard } from "../components/card.js";
@@ -24,20 +27,31 @@ import {
   enableValidation,
   disableSubmitButton,
 } from "../components/validate.js";
-import {
-  getInitialCards,
-  getUserProfile,
-  patchAvatar,
-  postCard,
-  patchProfile,
-  removeCard,
-  addLike,
-  deleteLike,
-} from "../components/api.js";
+// import {
+//   getInitialCards,
+//   getUserProfile,
+//   patchAvatar,
+//   postCard,
+//   patchProfile,
+//   removeCard,
+//   addLike,
+//   deleteLike,
+// } from "../components/api.js";
+import Api from "../components/Api.js"
+
+const config = {
+  baseUrl: "https://nomoreparties.co/v1/plus-cohort-3",
+  headers: {
+    authorization: "d9ff5da1-b706-4c23-8de1-6bd8c391fef1",
+    "Content-Type": "application/json",
+  },
+};
+
+const api = new Api(config);
 
 //Обработчик для удаления карточки
 function handleRemoveCard(cardElement, cardId) {
-  removeCard(cardId)
+  api.removeCard(cardId)
     .then(() => deleteCard(cardElement))
     .catch((err) => {
       console.log(err);
@@ -47,7 +61,7 @@ function handleRemoveCard(cardElement, cardId) {
 //Обработчик для лайка карточки
 function handleLikeCard(cardElement, cardId, cardLikeCounter) {
   if (!cardElement.classList.contains("cards__like-button_status_active")) {
-    addLike(cardId, cardLikeCounter)
+    api.addLike(cardId, cardLikeCounter)
       .then((data) => {
         toggleLikeCard(cardElement, cardLikeCounter, data);
       })
@@ -55,7 +69,7 @@ function handleLikeCard(cardElement, cardId, cardLikeCounter) {
         console.log(err);
       });
   } else {
-    deleteLike(cardId, cardLikeCounter)
+    api.deleteLike(cardId, cardLikeCounter)
       .then((data) => {
         toggleLikeCard(cardElement, cardLikeCounter, data);
       })
@@ -106,7 +120,7 @@ const addContentFromProfile = (content, input) => {
 function addCardFromPopup(evt) {
   evt.preventDefault();
   renderLoading(true, popupAddCard);
-  postCard()
+  api.postCard(cardName, cardLink)
     .then((data) => {
       addCard(
         cardsContainer,
@@ -143,7 +157,7 @@ popupAvatar.addEventListener("click", (event) => {
 //Слушатель добавления нового аватара по нажатию кнопки в модальном окне
 addAvatarForm.addEventListener("submit", (event) => {
   renderLoading(true, popupAvatar);
-  patchAvatar()
+  api.patchAvatar(avatarLink)
     .then((data) => {
       profileAvatar.src = data.avatar;
       closePopup(popupAvatar);
@@ -167,7 +181,7 @@ popupMain.addEventListener("click", (event) => {
 function submitProfilePatch(evt) {
   evt.preventDefault();
   renderLoading(true, popupMain);
-  patchProfile()
+  api.patchProfile(nameInput, jobInput)
     .then((data) => {
       addContentFromArr(
         profileTitleName,
@@ -218,7 +232,7 @@ enableValidation({
   errorClass: "popup__field-error_active",
 });
 
-Promise.all([getInitialCards(), getUserProfile()])
+Promise.all([api.getInitialCards(), api.getUserProfile()])
   .then(([cardsData, userInfo]) => {
     cardsData.forEach((element) => {
       addCard(
