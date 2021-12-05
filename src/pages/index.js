@@ -19,9 +19,9 @@ import {
   avatarLink,
   cardName,
   cardLink,
-  selector,
+  cardTemp,
 } from "../components/constants.js";
-import { openPopup, closePopup } from "../components/modal.js";
+// import { openPopup, closePopup } from "../components/modal.js";
 // import { createCard, deleteCard, toggleLikeCard } from "../components/card.js";
 import { handleCloseButtonAndOverlayClick } from "../components/utils.js";
 import {
@@ -39,7 +39,8 @@ import {
 //   deleteLike,
 // } from "../components/api.js";
 import Api from "../components/Api.js";
-import Card from "../components/card.js";
+import Card from "../components/Card.js";
+import Popup from "../components/modal.js"
 
 // const cardObject = {
 //   createdAt: "2021-12-04T19:10:06.156Z",
@@ -55,13 +56,20 @@ import Card from "../components/card.js";
 //   _id: "61abbd0e11c303001232bd8a"
 // };
 
+
+const popupPersonalAvatar = new Popup(popupAvatar);
+const popupPersonalInfo = new Popup(popupMain);
+const popupAddNewCard = new Popup(popupAddCard);
+
 //Функция открытия попапа картинки при клике на картинку
-function handleCardClick(cardImage, cardTitle) {
+function handleCardClick(cardTitle, cardImage) {
+  const popupImg = new Popup(popupImgOpen);
+  popupImg.setEventListeners();
+  popupImg.openPopup();
   const imgPopupContainer = popupImgOpen.querySelector(".popup__img");
   imgPopupContainer.src = cardImage;
   imgPopupContainer.alt = cardTitle;
   popupImgOpen.querySelector(".popup__caption").textContent = cardTitle;
-  openPopup(popupImgOpen);
 };
 
 //Обработчик для удаления карточки
@@ -186,9 +194,9 @@ function addCardFromPopup(evt) {
     .then((data) => {
       addCard(
         cardsContainer,
-        new Card(data, profileId, selector, handleCardClick, handleRemoveCard, handleLikeCard).createCard()
+        new Card(data, profileId, cardTemp, handleCardClick, handleRemoveCard, handleLikeCard).createCard()
       );
-      closePopup(popupAddCard);
+      popupAddNewCard.closePopup();
     })
     .catch((err) => {
       console.log(err);
@@ -203,18 +211,22 @@ function addCardFromPopup(evt) {
 editButton.addEventListener("click", () => {
   addContentFromProfile(profileTitleName, nameInput);
   addContentFromProfile(profileSubtitleName, jobInput);
-  openPopup(popupMain);
+  popupPersonalInfo.setEventListeners();
+  popupPersonalInfo.openPopup();
+  // openPopup(popupMain);
 });
+
 
 //слушатель нажатия на кнопку добавления аватара
 addAvatarButton.addEventListener("click", () => {
-  openPopup(popupAvatar);
+  popupPersonalAvatar.setEventListeners();
+  popupPersonalAvatar.openPopup()
 });
 
 //Слушатель закрытия модалього окна добавления аватара
-popupAvatar.addEventListener("click", (event) => {
-  handleCloseButtonAndOverlayClick(event, popupAvatar);
-});
+// popupAvatar.addEventListener("click", (event) => {
+//   handleCloseButtonAndOverlayClick(event, popupAvatar);
+// });
 
 //Слушатель добавления нового аватара по нажатию кнопки в модальном окне
 addAvatarForm.addEventListener("submit", (event) => {
@@ -222,7 +234,7 @@ addAvatarForm.addEventListener("submit", (event) => {
   api.patchAvatar(avatarLink)
     .then((data) => {
       profileAvatar.src = data.avatar;
-      closePopup(popupAvatar);
+      popupPersonalAvatar.closePopup();
     })
     .catch((err) => {
       console.log(err);
@@ -235,9 +247,9 @@ addAvatarForm.addEventListener("submit", (event) => {
 });
 
 //Слушатель выхода из редактора профиля
-popupMain.addEventListener("click", (event) => {
-  handleCloseButtonAndOverlayClick(event, popupMain);
-});
+// popupMain.addEventListener("click", (event) => {
+//   handleCloseButtonAndOverlayClick(event, popupMain);
+// });
 
 //Функция сохранения профиля на сервере после нажатия кнопки
 function submitProfilePatch(evt) {
@@ -251,7 +263,7 @@ function submitProfilePatch(evt) {
         profileAvatar,
         data
       );
-      closePopup(popupMain);
+      popupPersonalInfo.closePopup();
     })
     .catch((err) => {
       console.log(err);
@@ -266,13 +278,14 @@ profileFormElement.addEventListener("submit", submitProfilePatch);
 
 //Слушатель нажатия на кнопку для открытия модального окна "добавить карточку"
 addCardButton.addEventListener("click", () => {
-  openPopup(popupAddCard);
+  popupAddNewCard.setEventListeners();
+  popupAddNewCard.openPopup();
 });
 
 //Слушатель закрытия модального окна при нажатии на кнопку или вне поля модального окна
-popupAddCard.addEventListener("click", (event) => {
-  handleCloseButtonAndOverlayClick(event, popupAddCard);
-});
+// popupAddCard.addEventListener("click", (event) => {
+//   handleCloseButtonAndOverlayClick(event, popupAddCard);
+// });
 
 //Слушатель добавления карточки по нажатию кнопки в модальном окне
 formCardElement.addEventListener("submit", (event) => {
@@ -281,9 +294,10 @@ formCardElement.addEventListener("submit", (event) => {
 });
 
 //Слушатель закрытия модального окна картинки при нажатии на кнопку или вне поля модального окна
-popupImgOpen.addEventListener("click", (event) => {
-  handleCloseButtonAndOverlayClick(event, popupImgOpen);
-});
+// popupImgOpen.addEventListener("click", (event) => {
+//   handleCloseButtonAndOverlayClick(event, popupImgOpen);
+// });
+
 
 enableValidation({
   formSelector: ".popup__form",
@@ -299,7 +313,7 @@ Promise.all([api.getInitialCards(), api.getUserProfile()])
     cardsData.forEach((element) => {
       addCard(
         cardsContainer,
-        new Card(element, userInfo._id, selector, handleCardClick, handleRemoveCard, handleLikeCard).createCard()
+        new Card(element, userInfo._id, cardTemp, handleCardClick, handleRemoveCard, handleLikeCard).createCard()
       );
     });
     addContentFromArr(

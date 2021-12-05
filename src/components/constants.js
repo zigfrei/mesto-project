@@ -38,7 +38,7 @@ const popupAddCard = document.querySelector(".popup_theme_card");
 //Форма добавления карточки
 const formCardElement = popupAddCard.querySelector(".popup__form");
 //Селектор template карточки
-const selector = "#card-template";
+const cardTemp = "#card-template";
 
 export {
   popupMain,
@@ -60,5 +60,5 @@ export {
   addCardButton,
   popupAddCard,
   formCardElement,
-  selector,
+  cardTemp,
 };
