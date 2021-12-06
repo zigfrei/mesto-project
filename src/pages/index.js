@@ -23,7 +23,7 @@ import {
 } from "../components/constants.js";
 // import { openPopup, closePopup } from "../components/modal.js";
 // import { createCard, deleteCard, toggleLikeCard } from "../components/card.js";
-import { handleCloseButtonAndOverlayClick } from "../components/utils.js";
+// import { handleCloseButtonAndOverlayClick } from "../components/utils.js";
 import {
   enableValidation,
   disableSubmitButton,
@@ -40,7 +40,8 @@ import {
 // } from "../components/api.js";
 import Api from "../components/Api.js";
 import Card from "../components/Card.js";
-import Popup from "../components/modal.js"
+import Popup from "../components/Popup.js"
+import PopupWithImage from "../components/PopupWithImage.js"
 
 // const cardObject = {
 //   createdAt: "2021-12-04T19:10:06.156Z",
@@ -63,13 +64,16 @@ const popupAddNewCard = new Popup(popupAddCard);
 
 //Функция открытия попапа картинки при клике на картинку
 function handleCardClick(cardTitle, cardImage) {
-  const popupImg = new Popup(popupImgOpen);
+  // const popupImg = new Popup(popupImgOpen);
+  // popupImg.setEventListeners();
+  // popupImg.openPopup();
+  const popupImg = new PopupWithImage(popupImgOpen);
   popupImg.setEventListeners();
-  popupImg.openPopup();
-  const imgPopupContainer = popupImgOpen.querySelector(".popup__img");
-  imgPopupContainer.src = cardImage;
-  imgPopupContainer.alt = cardTitle;
-  popupImgOpen.querySelector(".popup__caption").textContent = cardTitle;
+  popupImg.openPopup(cardImage, cardTitle);
+  // const imgPopupContainer = popupImgOpen.querySelector(".popup__img");
+  // imgPopupContainer.src = cardImage;
+  // imgPopupContainer.alt = cardTitle;
+  // popupImgOpen.querySelector(".popup__caption").textContent = cardTitle;
 };
 
 //Обработчик для удаления карточки
