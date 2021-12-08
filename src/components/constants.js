@@ -37,6 +37,19 @@ const addCardButton = document.querySelector(".profile__add-button");
 const popupAddCard = document.querySelector(".popup_theme_card");
 //Форма добавления карточки
 const formCardElement = popupAddCard.querySelector(".popup__form");
+//Селектор template карточки
+const cardTemp = "#card-template";
+
+// Запрос всех форм 
+const forms = document.querySelectorAll(".popup__form");
+const selectors = {
+  inputSelector: ".popup__field",
+  submitButtonSelector: ".popup__submit-button",
+  inactiveButtonClass: "popup__submit-button_disabled",
+  inputErrorClass: "popup__field_type_error",
+  errorClass: "popup__field-error_active",
+  inputError: ".popup__field-error",
+};
 
 export {
   popupMain,
@@ -58,4 +71,7 @@ export {
   addCardButton,
   popupAddCard,
   formCardElement,
+  cardTemp,
+  selectors,
+  forms
 };
