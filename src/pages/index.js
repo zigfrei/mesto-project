@@ -16,14 +16,12 @@ import {
   addCardButton,
   popupAddCard,
   formCardElement,
+  forms
 } from "../components/constants.js";
 import { openPopup, closePopup } from "../components/modal.js";
 import { createCard, deleteCard, toggleLikeCard } from "../components/card.js";
 import { handleCloseButtonAndOverlayClick } from "../components/utils.js";
-import {
-  enableValidation,
-  disableSubmitButton,
-} from "../components/validate.js";
+import FormValidator from "../components/validate.js";
 import {
   getInitialCards,
   getUserProfile,
@@ -34,6 +32,21 @@ import {
   addLike,
   deleteLike,
 } from "../components/api.js";
+
+const selectors = {
+  inputSelector: ".popup__field",
+  submitButtonSelector: ".popup__submit-button",
+  inactiveButtonClass: "popup__submit-button_disabled",
+  inputErrorClass: "popup__field_type_error",
+  errorClass: "popup__field-error_active",
+  inputError: ".popup__field-error",
+};
+
+forms.forEach((form) => {
+  const valid = new FormValidator (selectors, form,);
+  valid.enableValidation()
+})
+
 
 //Обработчик для удаления карточки
 function handleRemoveCard(cardElement, cardId) {
@@ -209,14 +222,7 @@ popupImgOpen.addEventListener("click", (event) => {
   handleCloseButtonAndOverlayClick(event, popupImgOpen);
 });
 
-enableValidation({
-  formSelector: ".popup__form",
-  inputSelector: ".popup__field",
-  submitButtonSelector: ".popup__submit-button",
-  inactiveButtonClass: "popup__submit-button_disabled",
-  inputErrorClass: "popup__field_type_error",
-  errorClass: "popup__field-error_active",
-});
+
 
 Promise.all([getInitialCards(), getUserProfile()])
   .then(([cardsData, userInfo]) => {
