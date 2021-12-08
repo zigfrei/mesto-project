@@ -1,30 +1,37 @@
-import Popup from "./Popu.js";
+import Popup from "./Popup.js";
 
-export default class PopupWithForm extends Popup{
-  constructor(selector, submitProfilePatch){
-super(selector);
-this.submitProfilePatch = submitProfilePatch;
+export default class PopupWithForm extends Popup {
+  constructor(selector, callbackSubmitForm) {
+    super(selector);
+    this.callbackSubmitForm = callbackSubmitForm;
+    this._popupForm = this.selector.querySelector(".popup__form");
+    this._handelSubmitForm = this._handelSubmitForm.bind(this);
   }
 
+  //Достать все значения input из формы
   _getInputValues() {
-    this._inputList = this.selector.querySelectorAll('.popup__field');
-
+    this._inputList = this.selector.querySelectorAll(".popup__field");
     this._formValues = {};
-    this._inputList.forEach(input => this._formValues[input.name] = input.value);
-
+    this._inputList.forEach(
+      (input) => (this._formValues[input.name] = input.value)
+    );
     return this._formValues;
   }
 
+  //функция обработчик сабмита формы
+  _handelSubmitForm(e) {
+    e.preventDefault();
+    this.callbackSubmitForm(this._getInputValues());
+  }
+
   setEventListeners() {
-    this.selector.addEventListener("click", super._handleCloseButtonAndOverlayClick);
-    this.selector.querySelector(".popup__form").addEventListener("submit", submitProfilePatch);
+    super.setEventListeners();
+    this._popupForm.addEventListener("submit", this._handelSubmitForm);
   }
 
   closePopup() {
-    this.selector.classList.remove("popup_opened");
-    //Убрать слушатель закрытия модального окна нажатием клавиши Escape
-    document.removeEventListener("keydown", this._handleEscClose);
-    console.log('close');
+    super.closePopup();
+    this._popupForm.reset();
+    this._popupForm.removeEventListener("submit", this._handelSubmitForm);
   }
-
 }

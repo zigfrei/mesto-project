@@ -12,14 +12,10 @@ const profileAvatar = document.querySelector(".profile__avatar");
 const nameInput = document.querySelector("#author-name");
 //строка модального окна профессиональная деятельность
 const jobInput = document.querySelector("#profession");
-//форма модального окна профиля
-const profileFormElement = popupMain.querySelector(".popup__form");
 //модальное окно добавления аватара
 const popupAvatar = document.querySelector(".popup_theme_avatar");
 //Кнопка добавления нового аватара
 const addAvatarButton = document.querySelector(".profile__avatar-button");
-//форма модального окна добавления нового аватара
-const addAvatarForm = popupAvatar.querySelector(".popup__form");
 //Строка ввода ссылки на новый аватар
 const avatarLink = document.querySelector("#avatar-link");
 
@@ -35,12 +31,18 @@ const popupImgOpen = document.querySelector(".popup_theme_img");
 const addCardButton = document.querySelector(".profile__add-button");
 //Модальное окно добавления карточки
 const popupAddCard = document.querySelector(".popup_theme_card");
-//Форма добавления карточки
-const formCardElement = popupAddCard.querySelector(".popup__form");
 //Селектор template карточки
 const cardTemp = "#card-template";
+//Конфиг входа с токеном и заголовками
+const config = {
+  baseUrl: "https://nomoreparties.co/v1/plus-cohort-3",
+  headers: {
+    authorization: "d9ff5da1-b706-4c23-8de1-6bd8c391fef1",
+    "Content-Type": "application/json",
+  },
+};
 
-// Запрос всех форм 
+// Запрос всех форм
 const forms = document.querySelectorAll(".popup__form");
 const selectors = {
   inputSelector: ".popup__field",
@@ -59,10 +61,8 @@ export {
   profileAvatar,
   nameInput,
   jobInput,
-  profileFormElement,
   popupAvatar,
   addAvatarButton,
-  addAvatarForm,
   avatarLink,
   cardsContainer,
   cardName,
@@ -70,8 +70,8 @@ export {
   popupImgOpen,
   addCardButton,
   popupAddCard,
-  formCardElement,
   cardTemp,
   selectors,
-  forms
+  forms,
+  config,
 };

@@ -43,7 +43,8 @@ export default class FormValidator {
     });
   }
 
-  _disableSubmitButton() {
+  //Этот функцию надо использовать в index.js.... но пока не получается
+  disableSubmitButton() {
     const buttonElement = this.elementForm.querySelector(
       this.selectors.submitButtonSelector
     );
