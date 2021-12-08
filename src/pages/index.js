@@ -22,61 +22,26 @@ import {
   cardTemp,
   config,
 } from "../components/constants.js";
-// import { openPopup, closePopup } from "../components/modal.js";
-// import { createCard, deleteCard, toggleLikeCard } from "../components/card.js";
-// import { handleCloseButtonAndOverlayClick } from "../components/utils.js";
+
 import {
   enableValidation,
   disableSubmitButton,
 } from "../components/validate.js";
-// import {
-//   getInitialCards,
-//   getUserProfile,
-//   patchAvatar,
-//   postCard,
-//   patchProfile,
-//   removeCard,
-//   addLike,
-//   deleteLike,
-// } from "../components/api.js";
+
 import Api from "../components/Api.js";
 import Card from "../components/Card.js";
-import Popup from "../components/Popup.js"
 import PopupWithImage from "../components/PopupWithImage.js"
 import PopupWithForm from "../components/PopupWithForm.js"
 
-// const cardObject = {
-//   createdAt: "2021-12-04T19:10:06.156Z",
-//   likes: [111, 222],
-//   link: "https://images.unsplash.com/photo-1545561304-49524203c8a5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=807&q=80",
-//   name: "Барановичи",
-//   owner: {
-//   about: "Most popular JS camel in world",
-//   avatar: "https://im0-tub-by.yandex.net/i?id=634165321326bce04399a365adba8838-l&n=13",
-//   cohort: "plus-cohort-3",
-//   name: "JavaScriptCamel",
-//   _id: "d5c7f0787180d9cd8f569427"},
-//   _id: "61abbd0e11c303001232bd8a"
-// };
-
+//Создадим элемент класса Api и передадие ему настройки
 const api = new Api(config);
-// const popupPersonalAvatar = new Popup(popupAvatar);
-//const popupPersonalInfo = new Popup(popupMain);
-const popupAddNewCard = new Popup(popupAddCard);
 
 
 //Функция открытия попапа картинки при клике на картинку
 function handleCardClick(cardTitle, cardImage) {
-  // const popupImg = new Popup(popupImgOpen);
-  // popupImg.setEventListeners();
-  // popupImg.openPopup();
   const popupImg = new PopupWithImage(popupImgOpen);
   popupImg.setEventListeners();
   popupImg.openPopup(cardImage, cardTitle);
-  // const imgPopupContainer = popupImgOpen.querySelector(".popup__img");
-  // imgPopupContainer.src = cardImage;
-  // imgPopupContainer.alt = cardTitle;
-  // popupImgOpen.querySelector(".popup__caption").textContent = cardTitle;
 };
 
 //Обработчик для удаления карточки
@@ -108,38 +73,6 @@ function handleLikeCard(cardElement, cardId, cardLikeCounter) {
       });
   }
 }
-
-
-
-// //Обработчик для удаления карточки
-// function handleRemoveCard(cardElement, cardId) {
-//   api.removeCard(cardId)
-//     .then(() => deleteCard(cardElement))
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// }
-
-// //Обработчик для лайка карточки
-// function handleLikeCard(cardElement, cardId, cardLikeCounter) {
-//   if (!cardElement.classList.contains("cards__like-button_status_active")) {
-//     api.addLike(cardId, cardLikeCounter)
-//       .then((data) => {
-//         toggleLikeCard(cardElement, cardLikeCounter, data);
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   } else {
-//     api.deleteLike(cardId, cardLikeCounter)
-//       .then((data) => {
-//         toggleLikeCard(cardElement, cardLikeCounter, data);
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   }
-// }
 
 //индивидуальный номер профиля
 let profileId = 0;
@@ -178,69 +111,6 @@ const addContentFromProfile = (content, input) => {
   input.value = content.textContent;
 };
 
-//Функция добавления карточки из модального окна
-function addCardFromPopup(evt) {
-  evt.preventDefault();
-  renderLoading(true, popupAddCard);
-  api.postCard(cardName, cardLink)
-    .then((data) => {
-      addCard(
-        cardsContainer,
-        new Card(data, profileId, cardTemp, handleCardClick, handleRemoveCard, handleLikeCard).createCard()
-      );
-      popupAddNewCard.closePopup();
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      renderLoading(false, popupAddCard);
-    });
-  formCardElement.reset();
-}
-
-
-
-
-// //слушатель нажатия на кнопку добавления аватара
-// addAvatarButton.addEventListener("click", () => {
-//   popupPersonalAvatar.setEventListeners();
-//   popupPersonalAvatar.openPopup()
-// });
-
-//Слушатель закрытия модалього окна добавления аватара
-// popupAvatar.addEventListener("click", (event) => {
-//   handleCloseButtonAndOverlayClick(event, popupAvatar);
-// });
-
-// //Слушатель добавления нового аватара по нажатию кнопки в модальном окне
-// addAvatarForm.addEventListener("submit", (event) => {
-//   renderLoading(true, popupAvatar);
-//   api.patchAvatar(avatarLink)
-//     .then((data) => {
-//       profileAvatar.src = data.avatar;
-//       popupPersonalAvatar.closePopup();
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     })
-//     .finally(() => {
-//       renderLoading(false, popupAvatar);
-//     });
-
-//   disableSubmitButton(addAvatarForm);
-// });
-
-
-//11111111111111
-
-// const rrrr = popupAvatar.querySelectorAll('.popup__field');
-
-//     const zzzzz = {};
-//     rrrr.forEach(input => zzzzz[input.name] = input.value);
-//     console.log(zzzzz);
-
-
 //Функция добавления нового аватара по нажатию кнопки в модальном окне
 function handleSubmitAvatarForm (){
   renderLoading(true, popupAvatar);
@@ -255,7 +125,6 @@ function handleSubmitAvatarForm (){
     .finally(() => {
       renderLoading(false, popupAvatar);
     });
-
   disableSubmitButton(addAvatarForm);
 }
 
@@ -267,12 +136,6 @@ addAvatarButton.addEventListener("click", () => {
   popupEditAvatar.openPopup()
   popupEditAvatar.setEventListeners();
 });
-
-
-//Слушатель выхода из редактора профиля
-// popupMain.addEventListener("click", (event) => {
-//   handleCloseButtonAndOverlayClick(event, popupMain);
-// });
 
 //Функция сохранения информации профиля на сервере после нажатия кнопки
 function handleSubmitProfileForm() {
@@ -306,31 +169,33 @@ editButton.addEventListener("click", () => {
   popupEditPersonalInfo.setEventListeners();
 });
 
-// //Слушатель сохранения изменений в профиле по нажатию кнопки в модальном окне
-// profileFormElement.addEventListener("submit", submitProfilePatch);
+//Функция добавления карточки из модального окна
+function handleSubmitCardForm() {
+  renderLoading(true, popupAddCard);
+  api.postCard(cardName, cardLink)
+    .then((data) => {
+      addCard(
+        cardsContainer,
+        new Card(data, profileId, cardTemp, handleCardClick, handleRemoveCard, handleLikeCard).createCard()
+      );
+      popupEditCard.closePopup();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      renderLoading(false, popupAddCard);
+    });
+    disableSubmitButton(formCardElement);
+}
+
+const popupEditCard = new PopupWithForm(popupAddCard, handleSubmitCardForm);
 
 //Слушатель нажатия на кнопку для открытия модального окна "добавить карточку"
 addCardButton.addEventListener("click", () => {
-  popupAddNewCard.setEventListeners();
-  popupAddNewCard.openPopup();
+  popupEditCard.setEventListeners();
+  popupEditCard.openPopup();
 });
-
-//Слушатель закрытия модального окна при нажатии на кнопку или вне поля модального окна
-// popupAddCard.addEventListener("click", (event) => {
-//   handleCloseButtonAndOverlayClick(event, popupAddCard);
-// });
-
-//Слушатель добавления карточки по нажатию кнопки в модальном окне
-formCardElement.addEventListener("submit", (event) => {
-  addCardFromPopup(event);
-  disableSubmitButton(formCardElement);
-});
-
-//Слушатель закрытия модального окна картинки при нажатии на кнопку или вне поля модального окна
-// popupImgOpen.addEventListener("click", (event) => {
-//   handleCloseButtonAndOverlayClick(event, popupImgOpen);
-// });
-
 
 enableValidation({
   formSelector: ".popup__form",
