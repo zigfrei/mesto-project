@@ -47,7 +47,6 @@ import PopupWithImage from "../components/PopupWithImage.js";
 import FormValidator from "../components/validate.js";
 
 
-
 // const cardObject = {
 //   createdAt: "2021-12-04T19:10:06.156Z",
 //   likes: [111, 222],
@@ -68,6 +67,7 @@ forms.forEach((form) => {
   const valid = new FormValidator (selectors, form,);
   valid.enableValidation()
 })
+
 
 const popupPersonalAvatar = new Popup(popupAvatar);
 const popupPersonalInfo = new Popup(popupMain);
@@ -116,6 +116,7 @@ function handleLikeCard(cardElement, cardId, cardLikeCounter) {
       });
   }
 }
+
 
 // const profileId = 111;
 // const selector = "#card-template";
@@ -257,8 +258,8 @@ addAvatarForm.addEventListener("submit", (event) => {
     .finally(() => {
       renderLoading(false, popupAvatar);
     });
-
   // disableSubmitButton(addAvatarForm);
+
 });
 
 //Слушатель выхода из редактора профиля
@@ -312,6 +313,7 @@ formCardElement.addEventListener("submit", (event) => {
 // popupImgOpen.addEventListener("click", (event) => {
 //   handleCloseButtonAndOverlayClick(event, popupImgOpen);
 // });
+
 
 
 // enableValidation({
