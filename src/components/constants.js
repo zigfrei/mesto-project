@@ -40,6 +40,17 @@ const formCardElement = popupAddCard.querySelector(".popup__form");
 //Селектор template карточки
 const cardTemp = "#card-template";
 
+// Запрос всех форм 
+const forms = document.querySelectorAll(".popup__form");
+const selectors = {
+  inputSelector: ".popup__field",
+  submitButtonSelector: ".popup__submit-button",
+  inactiveButtonClass: "popup__submit-button_disabled",
+  inputErrorClass: "popup__field_type_error",
+  errorClass: "popup__field-error_active",
+  inputError: ".popup__field-error",
+};
+
 export {
   popupMain,
   editButton,
@@ -61,4 +72,6 @@ export {
   popupAddCard,
   formCardElement,
   cardTemp,
+  selectors,
+  forms
 };

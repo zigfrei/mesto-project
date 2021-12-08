@@ -20,14 +20,16 @@ import {
   cardName,
   cardLink,
   cardTemp,
+  forms,
+  selectors
 } from "../components/constants.js";
 // import { openPopup, closePopup } from "../components/modal.js";
 // import { createCard, deleteCard, toggleLikeCard } from "../components/card.js";
 // import { handleCloseButtonAndOverlayClick } from "../components/utils.js";
-import {
-  enableValidation,
-  disableSubmitButton,
-} from "../components/validate.js";
+// import {
+//   enableValidation,
+//   disableSubmitButton,
+// } from "../components/validate.js";
 // import {
 //   getInitialCards,
 //   getUserProfile,
@@ -41,7 +43,9 @@ import {
 import Api from "../components/Api.js";
 import Card from "../components/Card.js";
 import Popup from "../components/Popup.js"
-import PopupWithImage from "../components/PopupWithImage.js"
+import PopupWithImage from "../components/PopupWithImage.js";
+import FormValidator from "../components/validate.js";
+
 
 // const cardObject = {
 //   createdAt: "2021-12-04T19:10:06.156Z",
@@ -56,6 +60,13 @@ import PopupWithImage from "../components/PopupWithImage.js"
 //   _id: "d5c7f0787180d9cd8f569427"},
 //   _id: "61abbd0e11c303001232bd8a"
 // };
+
+
+
+forms.forEach((form) => {
+  const valid = new FormValidator (selectors, form,);
+  valid.enableValidation()
+})
 
 
 const popupPersonalAvatar = new Popup(popupAvatar);
@@ -105,6 +116,7 @@ function handleLikeCard(cardElement, cardId, cardLikeCounter) {
       });
   }
 }
+
 
 // const profileId = 111;
 // const selector = "#card-template";
@@ -246,8 +258,8 @@ addAvatarForm.addEventListener("submit", (event) => {
     .finally(() => {
       renderLoading(false, popupAvatar);
     });
+  // disableSubmitButton(addAvatarForm);
 
-  disableSubmitButton(addAvatarForm);
 });
 
 //Слушатель выхода из редактора профиля
@@ -294,7 +306,7 @@ addCardButton.addEventListener("click", () => {
 //Слушатель добавления карточки по нажатию кнопки в модальном окне
 formCardElement.addEventListener("submit", (event) => {
   addCardFromPopup(event);
-  disableSubmitButton(formCardElement);
+  // disableSubmitButton(formCardElement);
 });
 
 //Слушатель закрытия модального окна картинки при нажатии на кнопку или вне поля модального окна
@@ -303,14 +315,15 @@ formCardElement.addEventListener("submit", (event) => {
 // });
 
 
-enableValidation({
-  formSelector: ".popup__form",
-  inputSelector: ".popup__field",
-  submitButtonSelector: ".popup__submit-button",
-  inactiveButtonClass: "popup__submit-button_disabled",
-  inputErrorClass: "popup__field_type_error",
-  errorClass: "popup__field-error_active",
-});
+
+// enableValidation({
+//   formSelector: ".popup__form",
+//   inputSelector: ".popup__field",
+//   submitButtonSelector: ".popup__submit-button",
+//   inactiveButtonClass: "popup__submit-button_disabled",
+//   inputErrorClass: "popup__field_type_error",
+//   errorClass: "popup__field-error_active",
+// });
 
 Promise.all([api.getInitialCards(), api.getUserProfile()])
   .then(([cardsData, userInfo]) => {
