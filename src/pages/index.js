@@ -20,6 +20,7 @@ import {
   cardName,
   cardLink,
   cardTemp,
+  config,
 } from "../components/constants.js";
 // import { openPopup, closePopup } from "../components/modal.js";
 // import { createCard, deleteCard, toggleLikeCard } from "../components/card.js";
@@ -42,6 +43,7 @@ import Api from "../components/Api.js";
 import Card from "../components/Card.js";
 import Popup from "../components/Popup.js"
 import PopupWithImage from "../components/PopupWithImage.js"
+import PopupWithForm from "../components/PopupWithForm.js"
 
 // const cardObject = {
 //   createdAt: "2021-12-04T19:10:06.156Z",
@@ -57,10 +59,11 @@ import PopupWithImage from "../components/PopupWithImage.js"
 //   _id: "61abbd0e11c303001232bd8a"
 // };
 
-
-const popupPersonalAvatar = new Popup(popupAvatar);
-const popupPersonalInfo = new Popup(popupMain);
+const api = new Api(config);
+// const popupPersonalAvatar = new Popup(popupAvatar);
+//const popupPersonalInfo = new Popup(popupMain);
 const popupAddNewCard = new Popup(popupAddCard);
+
 
 //Функция открытия попапа картинки при клике на картинку
 function handleCardClick(cardTitle, cardImage) {
@@ -106,22 +109,7 @@ function handleLikeCard(cardElement, cardId, cardLikeCounter) {
   }
 }
 
-// const profileId = 111;
-// const selector = "#card-template";
-// const card = new Card(cardObject, profileId, selector, handleCardClick, handleRemoveCard, handleLikeCard);
-// card. createCard();
 
-
-
-const config = {
-  baseUrl: "https://nomoreparties.co/v1/plus-cohort-3",
-  headers: {
-    authorization: "d9ff5da1-b706-4c23-8de1-6bd8c391fef1",
-    "Content-Type": "application/json",
-  },
-};
-
-const api = new Api(config);
 
 // //Обработчик для удаления карточки
 // function handleRemoveCard(cardElement, cardId) {
@@ -211,34 +199,55 @@ function addCardFromPopup(evt) {
   formCardElement.reset();
 }
 
-//Слушатель нажатия на кнопку редактора профиля
-editButton.addEventListener("click", () => {
-  addContentFromProfile(profileTitleName, nameInput);
-  addContentFromProfile(profileSubtitleName, jobInput);
-  popupPersonalInfo.setEventListeners();
-  popupPersonalInfo.openPopup();
-  // openPopup(popupMain);
-});
 
 
-//слушатель нажатия на кнопку добавления аватара
-addAvatarButton.addEventListener("click", () => {
-  popupPersonalAvatar.setEventListeners();
-  popupPersonalAvatar.openPopup()
-});
+
+// //слушатель нажатия на кнопку добавления аватара
+// addAvatarButton.addEventListener("click", () => {
+//   popupPersonalAvatar.setEventListeners();
+//   popupPersonalAvatar.openPopup()
+// });
 
 //Слушатель закрытия модалього окна добавления аватара
 // popupAvatar.addEventListener("click", (event) => {
 //   handleCloseButtonAndOverlayClick(event, popupAvatar);
 // });
 
-//Слушатель добавления нового аватара по нажатию кнопки в модальном окне
-addAvatarForm.addEventListener("submit", (event) => {
+// //Слушатель добавления нового аватара по нажатию кнопки в модальном окне
+// addAvatarForm.addEventListener("submit", (event) => {
+//   renderLoading(true, popupAvatar);
+//   api.patchAvatar(avatarLink)
+//     .then((data) => {
+//       profileAvatar.src = data.avatar;
+//       popupPersonalAvatar.closePopup();
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     })
+//     .finally(() => {
+//       renderLoading(false, popupAvatar);
+//     });
+
+//   disableSubmitButton(addAvatarForm);
+// });
+
+
+//11111111111111
+
+// const rrrr = popupAvatar.querySelectorAll('.popup__field');
+
+//     const zzzzz = {};
+//     rrrr.forEach(input => zzzzz[input.name] = input.value);
+//     console.log(zzzzz);
+
+
+//Функция добавления нового аватара по нажатию кнопки в модальном окне
+function handleSubmitAvatarForm (){
   renderLoading(true, popupAvatar);
   api.patchAvatar(avatarLink)
     .then((data) => {
       profileAvatar.src = data.avatar;
-      popupPersonalAvatar.closePopup();
+      this.closePopup();
     })
     .catch((err) => {
       console.log(err);
@@ -248,16 +257,25 @@ addAvatarForm.addEventListener("submit", (event) => {
     });
 
   disableSubmitButton(addAvatarForm);
+}
+
+//Создание элемента класса попар с формой для аватара
+const popupEditAvatar = new PopupWithForm(popupAvatar, handleSubmitAvatarForm);
+
+//слушатель нажатия на кнопку добавления аватара
+addAvatarButton.addEventListener("click", () => {
+  popupEditAvatar.openPopup()
+  popupEditAvatar.setEventListeners();
 });
+
 
 //Слушатель выхода из редактора профиля
 // popupMain.addEventListener("click", (event) => {
 //   handleCloseButtonAndOverlayClick(event, popupMain);
 // });
 
-//Функция сохранения профиля на сервере после нажатия кнопки
-function submitProfilePatch(evt) {
-  evt.preventDefault();
+//Функция сохранения информации профиля на сервере после нажатия кнопки
+function handleSubmitProfileForm() {
   renderLoading(true, popupMain);
   api.patchProfile(nameInput, jobInput)
     .then((data) => {
@@ -267,7 +285,7 @@ function submitProfilePatch(evt) {
         profileAvatar,
         data
       );
-      popupPersonalInfo.closePopup();
+      popupEditPersonalInfo.closePopup();
     })
     .catch((err) => {
       console.log(err);
@@ -277,8 +295,19 @@ function submitProfilePatch(evt) {
     });
 }
 
-//Слушатель сохранения изменений в профиле по нажатию кнопки в модальном окне
-profileFormElement.addEventListener("submit", submitProfilePatch);
+//Создание элемента класса попар с формой для профиля
+const popupEditPersonalInfo = new PopupWithForm(popupMain, handleSubmitProfileForm);
+
+//Слушатель нажатия на кнопку редактора профиля
+editButton.addEventListener("click", () => {
+  addContentFromProfile(profileTitleName, nameInput);
+  addContentFromProfile(profileSubtitleName, jobInput);
+  popupEditPersonalInfo.openPopup();
+  popupEditPersonalInfo.setEventListeners();
+});
+
+// //Слушатель сохранения изменений в профиле по нажатию кнопки в модальном окне
+// profileFormElement.addEventListener("submit", submitProfilePatch);
 
 //Слушатель нажатия на кнопку для открытия модального окна "добавить карточку"
 addCardButton.addEventListener("click", () => {

@@ -18,7 +18,7 @@ closePopup() {
   this.selector.classList.remove("popup_opened");
   //Убрать слушатель закрытия модального окна нажатием клавиши Escape
   document.removeEventListener("keydown", this._handleEscClose);
-  console.log('close');
+  console.log('close vanila');
 }
 
 _handleEscClose(event) {

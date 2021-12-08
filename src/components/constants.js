@@ -39,6 +39,14 @@ const popupAddCard = document.querySelector(".popup_theme_card");
 const formCardElement = popupAddCard.querySelector(".popup__form");
 //Селектор template карточки
 const cardTemp = "#card-template";
+//Конфиг входа с токеном и заголовками
+const config = {
+  baseUrl: "https://nomoreparties.co/v1/plus-cohort-3",
+  headers: {
+    authorization: "d9ff5da1-b706-4c23-8de1-6bd8c391fef1",
+    "Content-Type": "application/json",
+  },
+};
 
 export {
   popupMain,
@@ -61,4 +69,5 @@ export {
   popupAddCard,
   formCardElement,
   cardTemp,
+  config,
 };

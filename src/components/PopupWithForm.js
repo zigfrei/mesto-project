@@ -1,9 +1,12 @@
-import Popup from "./Popu.js";
+import Popup from "./Popup.js";
 
 export default class PopupWithForm extends Popup{
-  constructor(selector, submitProfilePatch){
+  constructor(selector, callbackSubmitForm){
 super(selector);
-this.submitProfilePatch = submitProfilePatch;
+this.callbackSubmitForm = callbackSubmitForm;
+this._popupForm = this.selector.querySelector(".popup__form");
+// this. _funList =this. _funList.bind(this);
+
   }
 
   _getInputValues() {
@@ -15,16 +18,26 @@ this.submitProfilePatch = submitProfilePatch;
     return this._formValues;
   }
 
+  _funList(ev){
+ev.preventDefault();
+this.callbackSubmitForm(this._getInputValues());
+  }
+
   setEventListeners() {
-    this.selector.addEventListener("click", super._handleCloseButtonAndOverlayClick);
-    this.selector.querySelector(".popup__form").addEventListener("submit", submitProfilePatch);
+    super.setEventListeners();
+    this._popupForm.addEventListener("submit", (e) => {this._funList(e)}
+      // e.preventDefault();
+      // this.callbackSubmitForm(this._getInputValues());
+      // this.removeEventListener("submit", () =>{callbackSubmitForm()});}
+    );
+
   }
 
   closePopup() {
-    this.selector.classList.remove("popup_opened");
-    //Убрать слушатель закрытия модального окна нажатием клавиши Escape
-    document.removeEventListener("keydown", this._handleEscClose);
-    console.log('close');
+    super.closePopup();
+    this._popupForm.reset();
+    // this._popupForm.removeEventListener("submit", (e) => {this._funList(e)});
+    console.log('close popup with form');
   }
 
 }
