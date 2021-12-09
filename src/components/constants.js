@@ -53,6 +53,11 @@ const selectors = {
   inputError: ".popup__field-error",
 };
 
+const selectorInfo = {
+  name: ".profile__title",
+  about: ".profile__subtitle"
+}
+
 export {
   popupMain,
   editButton,
@@ -74,4 +79,5 @@ export {
   selectors,
   forms,
   config,
+  selectorInfo,
 };

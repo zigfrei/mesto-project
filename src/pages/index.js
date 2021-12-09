@@ -20,6 +20,7 @@ import {
   selectors,
   forms,
   config,
+  selectorInfo,
 } from "../components/constants.js";
 
 import Api from "../components/Api.js";
@@ -27,6 +28,10 @@ import Card from "../components/Card.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import FormValidator from "../components/FormValidator.js";
+import UserInfo from "../components/UserInfo.js";
+
+//Создадим элемент класса UserInfo
+const info = new UserInfo(selectorInfo);
 
 //Создадим элемент класса Api и передадие ему настройки
 const api = new Api(config);
@@ -79,7 +84,7 @@ function handleLikeCard(cardElement, cardId, cardLikeCounter) {
 //индивидуальный номер профиля
 let profileId = 0;
 
-//Функция добавления информации в профиль с массива сервера
+//Функция добавления информации в профиль с массива сервера !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 const addContentFromArr = (
   profileName,
   profileAbout,
@@ -107,11 +112,6 @@ const renderLoading = (isLoading, popupElement) => {
   }
 };
 
-//Редактирование имени и информации о себе
-//Функция добавление информации из профиля в форму
-const addContentFromProfile = (content, input) => {
-  input.value = content.textContent;
-};
 
 //Функция добавления нового аватара по нажатию кнопки в модальном окне
 function handleSubmitAvatarForm() {
@@ -146,18 +146,13 @@ function handleSubmitProfileForm() {
   api
     .patchProfile(nameInput, jobInput)
     .then((data) => {
-      addContentFromArr(
-        profileTitleName,
-        profileSubtitleName,
-        profileAvatar,
-        data
-      );
-      popupEditPersonalInfo.closePopup();
+      info.setUserInfo(data)
     })
     .catch((err) => {
       console.log(err);
     })
     .finally(() => {
+      popupEditPersonalInfo.closePopup();
       renderLoading(false, popupMain);
     });
 }
@@ -170,8 +165,10 @@ const popupEditPersonalInfo = new PopupWithForm(
 
 //Слушатель нажатия на кнопку редактора профиля
 editButton.addEventListener("click", () => {
-  addContentFromProfile(profileTitleName, nameInput);
-  addContentFromProfile(profileSubtitleName, jobInput);
+  nameInput.value = info.getUserInfo().name;
+  jobInput.value = info.getUserInfo().about;
+  // addContentFromProfile(profileTitleName, nameInput);
+  // addContentFromProfile(profileSubtitleName, jobInput);
   popupEditPersonalInfo.openPopup();
   popupEditPersonalInfo.setEventListeners();
 });
