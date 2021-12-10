@@ -74,10 +74,10 @@ export default class Card {
   }
 
   createCard() {
-    const caaaard = this._getElement();
-    this._cardSettings(caaaard.cardElement);
-    this._addListeners(caaaard);
-    return caaaard.cardTemplate;
+    const cardElementWithSettings = this._getElement();
+    this._cardSettings(cardElementWithSettings.cardElement);
+    this._addListeners(cardElementWithSettings);
+    return cardElementWithSettings.cardTemplate;
   }
 
   _deleteCard(cardElement) {

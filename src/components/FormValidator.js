@@ -11,7 +11,6 @@ export default class FormValidator {
         this.elementForm.querySelectorAll(this.selectors.inputSelector)
       ),
     };
-    // console.log(elements.inputs);
     return elements;
   }
 
@@ -41,14 +40,6 @@ export default class FormValidator {
     return this._getElement().inputs.some((inputElement) => {
       return !inputElement.validity.valid;
     });
-  }
-
-  //Этот функцию надо использовать в index.js.... но пока не получается
-  disableSubmitButton() {
-    const buttonElement = this.elementForm.querySelector(
-      this.selectors.submitButtonSelector
-    );
-    buttonElement.classList.add(this.selectors.inactiveButtonClass);
   }
 
   _toggleButtonState() {
