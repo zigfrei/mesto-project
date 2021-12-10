@@ -21,6 +21,7 @@ import {
   forms,
   config,
   selectorInfo,
+  buttonSubmit
 } from "../components/constants.js";
 
 import Api from "../components/Api.js";
@@ -29,10 +30,11 @@ import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import FormValidator from "../components/FormValidator.js";
 import UserInfo from "../components/UserInfo.js";
+import Section from "../components/Section.js";
 
 //Создадим элемент класса UserInfo
 const info = new UserInfo(selectorInfo);
-import Section from "../components/Section.js";
+
 
 //Создадим элемент класса Api и передадие ему настройки
 const api = new Api(config);
@@ -114,6 +116,11 @@ const renderLoading = (isLoading, popupElement) => {
   }
 };
 
+  //Этот функцию надо использовать в index.js.... но пока не получается
+  function disableSubmitButton (elementForm) {
+    const buttonElement = elementForm.querySelector(selectors.submitButtonSelector);
+    buttonElement.classList.add(selectors.inactiveButtonClass);
+  }
 
 //Функция добавления нового аватара по нажатию кнопки в модальном окне
 function handleSubmitAvatarForm() {
@@ -129,8 +136,8 @@ function handleSubmitAvatarForm() {
     })
     .finally(() => {
       renderLoading(false, popupAvatar);
+      disableSubmitButton(popupAvatar);
     });
-
 }
 
 //Создание элемента класса попар с формой для аватара
@@ -148,7 +155,7 @@ function handleSubmitProfileForm() {
   api
     .patchProfile(nameInput, jobInput)
     .then((data) => {
-      info.setUserInfo(data)
+      info.setUserInfo(data);
     })
     .catch((err) => {
       console.log(err);
@@ -156,6 +163,7 @@ function handleSubmitProfileForm() {
     .finally(() => {
       popupEditPersonalInfo.closePopup();
       renderLoading(false, popupMain);
+      disableSubmitButton(popupMain);
     });
 }
 
@@ -197,6 +205,7 @@ function handleSubmitCardForm() {
     })
     .finally(() => {
       renderLoading(false, popupAddCard);
+      disableSubmitButton(popupAddCard);
     });
 }
 
@@ -210,13 +219,25 @@ addCardButton.addEventListener("click", () => {
 
 Promise.all([api.getInitialCards(), api.getUserProfile()])
   .then(([cardsData, userInfo]) => {
-const sectionCards = new Section ({items: cardsData, renderer: (element) => {
-   const cardElement = new Card(element, userInfo._id, cardTemp, handleCardClick, handleRemoveCard, handleLikeCard).createCard();
-   sectionCards.setItem(cardElement);
-  }},
-    ".cards__list")
-    sectionCards.renderItems()
-    
+    const sectionCards = new Section(
+      {
+        items: cardsData,
+        renderer: (element) => {
+          const cardElement = new Card(
+            element,
+            userInfo._id,
+            cardTemp,
+            handleCardClick,
+            handleRemoveCard,
+            handleLikeCard
+          ).createCard();
+          sectionCards.setItem(cardElement);
+        },
+      },
+      cardsContainer
+    );
+    sectionCards.renderItems();
+
     addContentFromArr(
       profileTitleName,
       profileSubtitleName,
@@ -227,6 +248,3 @@ const sectionCards = new Section ({items: cardsData, renderer: (element) => {
   .catch((err) => {
     console.log(err);
   });
-
-
-

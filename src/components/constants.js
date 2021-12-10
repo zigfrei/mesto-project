@@ -43,6 +43,7 @@ const config = {
 };
 const items = [];
 
+
 // Запрос всех форм
 const forms = document.querySelectorAll(".popup__form");
 const selectors = {
