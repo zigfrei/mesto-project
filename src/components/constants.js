@@ -41,6 +41,7 @@ const config = {
     "Content-Type": "application/json",
   },
 };
+const items = [];
 
 // Запрос всех форм
 const forms = document.querySelectorAll(".popup__form");
@@ -74,4 +75,5 @@ export {
   selectors,
   forms,
   config,
+  items
 };

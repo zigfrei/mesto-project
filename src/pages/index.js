@@ -20,6 +20,7 @@ import {
   selectors,
   forms,
   config,
+  items
 } from "../components/constants.js";
 
 import Api from "../components/Api.js";
@@ -27,10 +28,20 @@ import Card from "../components/Card.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import FormValidator from "../components/FormValidator.js";
+import Section from "../components/Section.js";
+
+
+
+
+
+
+
+
 
 //Создадим элемент класса Api и передадие ему настройки
 const api = new Api(config);
 
+// добавление валидации для всех модальных окон
 forms.forEach((form) => {
   const valid = new FormValidator(selectors, form);
   valid.enableValidation();
@@ -79,7 +90,7 @@ function handleLikeCard(cardElement, cardId, cardLikeCounter) {
 //индивидуальный номер профиля
 let profileId = 0;
 
-//Функция добавления информации в профиль с массива сервера
+//Функция добавления информации в профиль с массива сервера!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 const addContentFromArr = (
   profileName,
   profileAbout,
@@ -214,19 +225,13 @@ addCardButton.addEventListener("click", () => {
 
 Promise.all([api.getInitialCards(), api.getUserProfile()])
   .then(([cardsData, userInfo]) => {
-    cardsData.forEach((element) => {
-      addCard(
-        cardsContainer,
-        new Card(
-          element,
-          userInfo._id,
-          cardTemp,
-          handleCardClick,
-          handleRemoveCard,
-          handleLikeCard
-        ).createCard()
-      );
-    });
+const sectionCards = new Section ({items: cardsData, renderer: (element) => {
+   const cardElement = new Card(element, userInfo._id, cardTemp, handleCardClick, handleRemoveCard, handleLikeCard).createCard();
+   sectionCards.setItem(cardElement);
+  }},
+    ".cards__list")
+    sectionCards.renderItems()
+    
     addContentFromArr(
       profileTitleName,
       profileSubtitleName,
@@ -238,4 +243,5 @@ Promise.all([api.getInitialCards(), api.getUserProfile()])
     console.log(err);
   });
 
-export { renderLoading };
+
+
