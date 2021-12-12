@@ -2,15 +2,11 @@ import "./index.css";
 import {
   popupMain,
   editButton,
-  profileTitleName,
-  profileSubtitleName,
-  profileAvatar,
   nameInput,
   jobInput,
   popupAvatar,
   addAvatarButton,
   cardsContainer,
-  cardsContainerElement,
   popupImgOpen,
   addCardButton,
   popupAddCard,
@@ -24,9 +20,9 @@ import {
   elementPopupAvatar,
   elementPopupAddCard,
   popupAvatarForm,
-popupMainForm,
-popupAddCardForm,
-api,
+  popupMainForm,
+  popupAddCardForm,
+  api,
 } from "../utils/constants.js";
 
 import Card from "../components/Card.js";
@@ -40,14 +36,14 @@ import Section from "../components/Section.js";
 const info = new UserInfo(profileSelectors);
 
 //Функция создания новой карточки
-function createCard (element){
-    const cardElement = new Card(
-      element,
-      JSON.parse(sessionStorage.getItem("profileId")),
-      cardTemp,
-      handleCardClick,
-    );
-    return cardElement.createCard();
+function createCard(element) {
+  const cardElement = new Card(
+    element,
+    JSON.parse(sessionStorage.getItem("profileId")),
+    cardTemp,
+    handleCardClick
+  );
+  return cardElement.createCard();
 }
 
 //Функция открытия попапа картинки при клике на картинку
@@ -87,7 +83,10 @@ function handleSubmitAvatarForm() {
 //Создание элемента класса попар с формой для аватара
 const popupEditAvatar = new PopupWithForm(popupAvatar, handleSubmitAvatarForm);
 popupEditAvatar.setEventListeners();
-const validAvatarPopup = new FormValidator(selectorsAndFormClasses, popupAvatarForm);
+const validAvatarPopup = new FormValidator(
+  selectorsAndFormClasses,
+  popupAvatarForm
+);
 validAvatarPopup.enableValidation();
 
 //слушатель нажатия на кнопку добавления аватара
@@ -119,7 +118,10 @@ const popupEditPersonalInfo = new PopupWithForm(
   handleSubmitProfileForm
 );
 popupEditPersonalInfo.setEventListeners();
-const validMainPopup = new FormValidator(selectorsAndFormClasses, popupMainForm);
+const validMainPopup = new FormValidator(
+  selectorsAndFormClasses,
+  popupMainForm
+);
 validMainPopup.enableValidation();
 
 //Слушатель нажатия на кнопку редактора профиля
@@ -135,23 +137,17 @@ function handleSubmitCardForm() {
   api
     .postCard(cardName, cardLink)
     .then((data) => {
-            const sectionSingleCard = new Section(
+      const sectionSingleCard = new Section(
         {
           items: data,
-          renderer: sectionSingleCard.setItem(createCard(data)),
-          // renderer: (element) => {
-          //   const cardElement = new Card(
-          //     element,
-          //     JSON.parse(sessionStorage.getItem("profileId")),
-          //     cardTemp,
-          //     handleCardClick,
-          //   ).createCard();
-          //   sectionSingleCard.setItem(cardElement);
-          // },
+          renderer: (el) => {
+            sectionSingleCard.setItem(createCard(el));
+          },
         },
-        cardsContainer);
-        sectionSingleCard.prependItem(data);
-        popupEditCard.closePopup();
+        cardsContainer
+      );
+      sectionSingleCard.prependItem(data);
+      popupEditCard.closePopup();
     })
     .catch((err) => {
       console.log(err);
@@ -163,9 +159,11 @@ function handleSubmitCardForm() {
 
 const popupEditCard = new PopupWithForm(popupAddCard, handleSubmitCardForm);
 popupEditCard.setEventListeners();
-const validAddCardPopup = new FormValidator(selectorsAndFormClasses, popupAddCardForm);
+const validAddCardPopup = new FormValidator(
+  selectorsAndFormClasses,
+  popupAddCardForm
+);
 validAddCardPopup.enableValidation();
-
 
 //Слушатель нажатия на кнопку для открытия модального окна "добавить карточку"
 addCardButton.addEventListener("click", () => {
@@ -179,13 +177,7 @@ Promise.all([api.getInitialCards(), api.getUserProfile()])
       {
         items: cardsData,
         renderer: (element) => {
-          const cardElement = new Card(
-            element,
-            userInfo._id,
-            cardTemp,
-            handleCardClick,
-          ).createCard();
-          sectionCards.setItem(cardElement);
+          sectionCards.setItem(createCard(element));
         },
       },
       cardsContainer

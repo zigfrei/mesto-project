@@ -1,52 +1,45 @@
-import {api} from "../utils/constants.js";
+import { api } from "../utils/constants.js";
 
 export default class Card {
-  constructor(
-    cardObject,
-    profileId,
-    selector,
-    handleCardClick,
-  ) {
+  constructor(cardObject, profileId, selector, handleCardClick) {
     this.cardObject = cardObject;
     this._selector = selector;
     this.profileId = profileId;
     this.handleCardClick = handleCardClick;
   }
 
-//Обработчик для удаления карточки
-_handleRemoveCard(cardElement, cardId, deleteCard) {
-  api
-    .removeCard(cardId)
-    .then(() => deleteCard)
-    .catch((err) => {
-      console.log(err);
-    });
-}
-
-//Обработчик для лайка карточки
-_handleLikeCard(cardElement, cardId, cardLikeCounter) {
-  if (!cardElement.classList.contains("cards__like-button_status_active")) {
+  //Обработчик для удаления карточки
+  _handleRemoveCard(cardElement, cardId, deleteCard) {
     api
-      .addLike(cardId, cardLikeCounter)
-      .then((data) => {
-        this._toggleLikeCard(cardElement, cardLikeCounter, data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  } else {
-    api
-      .deleteLike(cardId, cardLikeCounter)
-      .then((data) => {
-        this._toggleLikeCard(cardElement, cardLikeCounter, data);
-      })
+      .removeCard(cardId)
+      .then(() => deleteCard)
       .catch((err) => {
         console.log(err);
       });
   }
-}
 
-
+  //Обработчик для лайка карточки
+  _handleLikeCard(cardElement, cardId, cardLikeCounter) {
+    if (!cardElement.classList.contains("cards__like-button_status_active")) {
+      api
+        .addLike(cardId, cardLikeCounter)
+        .then((data) => {
+          this._toggleLikeCard(cardElement, cardLikeCounter, data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      api
+        .deleteLike(cardId, cardLikeCounter)
+        .then((data) => {
+          this._toggleLikeCard(cardElement, cardLikeCounter, data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
 
   //Получаем template картоку с селекторами
   _getElement() {
@@ -90,11 +83,19 @@ _handleLikeCard(cardElement, cardId, cardLikeCounter) {
     const sel = this;
     // слушатель лайка при клике
     card.cardElement.cardLikeButton.addEventListener("click", function (evt) {
-      sel._handleLikeCard(evt.target, sel.cardObject._id, card.cardElement.cardLikeCounter);
+      sel._handleLikeCard(
+        evt.target,
+        sel.cardObject._id,
+        card.cardElement.cardLikeCounter
+      );
     });
     // слушатель удаления при клике
     card.cardElement.cardRemoveButton.addEventListener("click", function (evt) {
-      sel._handleRemoveCard(card.cardTemplate, sel.cardObject._id, sel._deleteCard(card.cardTemplate));
+      sel._handleRemoveCard(
+        card.cardTemplate,
+        sel.cardObject._id,
+        sel._deleteCard(card.cardTemplate)
+      );
     });
     // слушатель открытия модального окна при клике на картинку
     card.cardElement.cardImgContainer.addEventListener("click", function () {
