@@ -27,6 +27,11 @@ export default class FormValidator {
     this.submitButton.setAttribute("disabled", "disabled");
   }
 
+  _enableSubmitButton() {
+    this.submitButton.classList.remove(this.selectors.inactiveButtonClass);
+    this.submitButton.removeAttribute("disabled", "disabled");
+  }
+
   _checkInputValidity(input) {
     if (!input.validity.valid) {
       this._showInputError(input);
@@ -43,11 +48,9 @@ export default class FormValidator {
 
   _toggleButtonState() {
     if (this._hasInvalidInput()) {
-      this.submitButton.classList.add(this.selectors.inactiveButtonClass);
-      this.submitButton.setAttribute("disabled", "disabled");
+      this.disableSubmitButton();
     } else {
-      this.submitButton.classList.remove(this.selectors.inactiveButtonClass);
-      this.submitButton.removeAttribute("disabled", "disabled");
+      this._enableSubmitButton();
     }
   }
 

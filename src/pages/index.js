@@ -35,7 +35,6 @@ import UserInfo from "../components/UserInfo.js";
 // //Создадим элемент класса UserInfo
 const info = new UserInfo(profileSelectors);
 
-
 //Функция создания новой карточки
 function createCard(element) {
   const cardElement = new Card(
@@ -57,10 +56,12 @@ const sectionCard = new Section(
   cardsContainer
 );
 
+//Cоздание элемента класса модального окна картинки
+const popupImg = new PopupWithImage(popupImgOpen);
+popupImg.setEventListeners();
+
 //Функция открытия попапа картинки при клике на картинку
 function handleCardClick(cardTitle, cardImage) {
-  const popupImg = new PopupWithImage(popupImgOpen);
-  popupImg.setEventListeners();
   popupImg.openPopup(cardImage, cardTitle);
 }
 
@@ -91,7 +92,7 @@ function handleSubmitAvatarForm() {
     });
 }
 
-//Создание элемента класса попар с формой для аватара
+//Создание элемента класса модального окна с формой для аватара
 const popupEditAvatar = new PopupWithForm(popupAvatar, handleSubmitAvatarForm);
 popupEditAvatar.setEventListeners();
 const validAvatarPopup = new FormValidator(
@@ -182,6 +183,3 @@ Promise.all([api.getInitialCards(), api.getUserProfile()])
   .catch((err) => {
     console.log(err);
   });
-
-
-
