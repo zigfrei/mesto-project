@@ -7,10 +7,10 @@ super(selector);
 
 openPopup(cardImage, cardTitle) {
   super.openPopup();
-  this.imgPopupContainer = this.selector.querySelector(".popup__img");
+  this.imgPopupContainer = this.popupElement.querySelector(".popup__img");
   this.imgPopupContainer.src = cardImage;
   this.imgPopupContainer.alt = cardTitle;
-  this.selector.querySelector(".popup__caption").textContent = cardTitle;
+  this.popupElement.querySelector(".popup__caption").textContent = cardTitle;
 }
 
 }

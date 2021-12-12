@@ -10,6 +10,7 @@ import {
   popupAvatar,
   addAvatarButton,
   cardsContainer,
+  cardsContainerElement,
   popupImgOpen,
   addCardButton,
   popupAddCard,
@@ -17,14 +18,17 @@ import {
   cardName,
   cardLink,
   cardTemp,
-  selectors,
-  forms,
-  config,
-  selectorInfo,
-  buttonSubmit
-} from "../components/constants.js";
+  selectorsAndFormClasses,
+  profileSelectors,
+  elementPopupMain,
+  elementPopupAvatar,
+  elementPopupAddCard,
+  popupAvatarForm,
+popupMainForm,
+popupAddCardForm,
+api,
+} from "../utils/constants.js";
 
-import Api from "../components/Api.js";
 import Card from "../components/Card.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
@@ -33,77 +37,24 @@ import UserInfo from "../components/UserInfo.js";
 import Section from "../components/Section.js";
 
 //Создадим элемент класса UserInfo
-const info = new UserInfo(selectorInfo);
+const info = new UserInfo(profileSelectors);
 
-
-//Создадим элемент класса Api и передадие ему настройки
-const api = new Api(config);
-
-// добавление валидации для всех модальных окон
-forms.forEach((form) => {
-  const valid = new FormValidator(selectors, form);
-  valid.enableValidation();
-});
+//Функция создания новой карточки
+function createCard (element){
+    const cardElement = new Card(
+      element,
+      JSON.parse(sessionStorage.getItem("profileId")),
+      cardTemp,
+      handleCardClick,
+    );
+    return cardElement.createCard();
+}
 
 //Функция открытия попапа картинки при клике на картинку
 function handleCardClick(cardTitle, cardImage) {
   const popupImg = new PopupWithImage(popupImgOpen);
   popupImg.setEventListeners();
   popupImg.openPopup(cardImage, cardTitle);
-}
-
-//Обработчик для удаления карточки
-function handleRemoveCard(cardElement, cardId) {
-  api
-    .removeCard(cardId)
-    .then(() => this._deleteCard(cardElement))
-    .catch((err) => {
-      console.log(err);
-    });
-}
-
-//Обработчик для лайка карточки
-function handleLikeCard(cardElement, cardId, cardLikeCounter) {
-  if (!cardElement.classList.contains("cards__like-button_status_active")) {
-    api
-      .addLike(cardId, cardLikeCounter)
-      .then((data) => {
-        this._toggleLikeCard(cardElement, cardLikeCounter, data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  } else {
-    api
-      .deleteLike(cardId, cardLikeCounter)
-      .then((data) => {
-        this._toggleLikeCard(cardElement, cardLikeCounter, data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-}
-
-//индивидуальный номер профиля
-let profileId = 0;
-
-//Функция добавления информации в профиль с массива сервера !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-const addContentFromArr = (
-  profileName,
-  profileAbout,
-  profileAvatar,
-  serverArr
-) => {
-  profileName.textContent = serverArr.name;
-  profileAbout.textContent = serverArr.about;
-  profileAvatar.src = serverArr.avatar;
-  profileId = serverArr._id;
-};
-
-//функция добавления карточки в контейнер
-function addCard(container, cardElementAdd) {
-  container.prepend(cardElementAdd);
 }
 
 const renderLoading = (isLoading, popupElement) => {
@@ -116,54 +67,49 @@ const renderLoading = (isLoading, popupElement) => {
   }
 };
 
-  //Этот функцию надо использовать в index.js.... но пока не получается
-  function disableSubmitButton (elementForm) {
-    const buttonElement = elementForm.querySelector(selectors.submitButtonSelector);
-    buttonElement.classList.add(selectors.inactiveButtonClass);
-  }
-
 //Функция добавления нового аватара по нажатию кнопки в модальном окне
 function handleSubmitAvatarForm() {
-  renderLoading(true, popupAvatar);
+  renderLoading(true, elementPopupAvatar);
   api
     .patchAvatar(avatarLink)
     .then((data) => {
-      profileAvatar.src = data.avatar;
-      this.closePopup();
+      info.setUserInfo(data);
+      popupEditAvatar.closePopup();
     })
     .catch((err) => {
       console.log(err);
     })
     .finally(() => {
-      renderLoading(false, popupAvatar);
-      disableSubmitButton(popupAvatar);
+      renderLoading(false, elementPopupAvatar);
     });
 }
 
 //Создание элемента класса попар с формой для аватара
 const popupEditAvatar = new PopupWithForm(popupAvatar, handleSubmitAvatarForm);
+popupEditAvatar.setEventListeners();
+const validAvatarPopup = new FormValidator(selectorsAndFormClasses, popupAvatarForm);
+validAvatarPopup.enableValidation();
 
 //слушатель нажатия на кнопку добавления аватара
 addAvatarButton.addEventListener("click", () => {
+  validAvatarPopup.disableSubmitButton();
   popupEditAvatar.openPopup();
-  popupEditAvatar.setEventListeners();
 });
 
 //Функция сохранения информации профиля на сервере после нажатия кнопки
 function handleSubmitProfileForm() {
-  renderLoading(true, popupMain);
+  renderLoading(true, elementPopupMain);
   api
     .patchProfile(nameInput, jobInput)
     .then((data) => {
       info.setUserInfo(data);
+      popupEditPersonalInfo.closePopup();
     })
     .catch((err) => {
       console.log(err);
     })
     .finally(() => {
-      popupEditPersonalInfo.closePopup();
-      renderLoading(false, popupMain);
-      disableSubmitButton(popupMain);
+      renderLoading(false, elementPopupMain);
     });
 }
 
@@ -172,48 +118,58 @@ const popupEditPersonalInfo = new PopupWithForm(
   popupMain,
   handleSubmitProfileForm
 );
+popupEditPersonalInfo.setEventListeners();
+const validMainPopup = new FormValidator(selectorsAndFormClasses, popupMainForm);
+validMainPopup.enableValidation();
 
 //Слушатель нажатия на кнопку редактора профиля
 editButton.addEventListener("click", () => {
   nameInput.value = info.getUserInfo().name;
   jobInput.value = info.getUserInfo().about;
   popupEditPersonalInfo.openPopup();
-  popupEditPersonalInfo.setEventListeners();
 });
 
 //Функция добавления карточки из модального окна
 function handleSubmitCardForm() {
-  renderLoading(true, popupAddCard);
+  renderLoading(true, elementPopupAddCard);
   api
     .postCard(cardName, cardLink)
     .then((data) => {
-      addCard(
-        cardsContainer,
-        new Card(
-          data,
-          profileId,
-          cardTemp,
-          handleCardClick,
-          handleRemoveCard,
-          handleLikeCard
-        ).createCard()
-      );
-      popupEditCard.closePopup();
+            const sectionSingleCard = new Section(
+        {
+          items: data,
+          renderer: sectionSingleCard.setItem(createCard(data)),
+          // renderer: (element) => {
+          //   const cardElement = new Card(
+          //     element,
+          //     JSON.parse(sessionStorage.getItem("profileId")),
+          //     cardTemp,
+          //     handleCardClick,
+          //   ).createCard();
+          //   sectionSingleCard.setItem(cardElement);
+          // },
+        },
+        cardsContainer);
+        sectionSingleCard.prependItem(data);
+        popupEditCard.closePopup();
     })
     .catch((err) => {
       console.log(err);
     })
     .finally(() => {
-      renderLoading(false, popupAddCard);
-      disableSubmitButton(popupAddCard);
+      renderLoading(false, elementPopupAddCard);
     });
 }
 
 const popupEditCard = new PopupWithForm(popupAddCard, handleSubmitCardForm);
+popupEditCard.setEventListeners();
+const validAddCardPopup = new FormValidator(selectorsAndFormClasses, popupAddCardForm);
+validAddCardPopup.enableValidation();
+
 
 //Слушатель нажатия на кнопку для открытия модального окна "добавить карточку"
 addCardButton.addEventListener("click", () => {
-  popupEditCard.setEventListeners();
+  validAddCardPopup.disableSubmitButton();
   popupEditCard.openPopup();
 });
 
@@ -228,22 +184,15 @@ Promise.all([api.getInitialCards(), api.getUserProfile()])
             userInfo._id,
             cardTemp,
             handleCardClick,
-            handleRemoveCard,
-            handleLikeCard
           ).createCard();
           sectionCards.setItem(cardElement);
         },
       },
       cardsContainer
     );
-    sectionCards.renderItems();
+    sectionCards.renderItems(cardsData);
 
-    addContentFromArr(
-      profileTitleName,
-      profileSubtitleName,
-      profileAvatar,
-      userInfo
-    );
+    info.setUserInfo(userInfo);
   })
   .catch((err) => {
     console.log(err);

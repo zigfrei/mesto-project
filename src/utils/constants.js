@@ -1,5 +1,16 @@
-//модальное окно редактирования профиля
-const popupMain = document.querySelector(".popup_theme_main");
+import Api from "../components/Api.js";
+//селектор модального окна редактирования профиля
+const popupMain = ".popup_theme_main";
+const elementPopupMain = document.querySelector(popupMain);
+//селектор модального окна добавления аватара
+const popupAvatar = ".popup_theme_avatar";
+const elementPopupAvatar = document.querySelector(popupAvatar);
+//селектор модального окна изображения
+const popupImgOpen = ".popup_theme_img";
+//селектор модального окна добавления карточки
+const popupAddCard = ".popup_theme_card";
+const elementPopupAddCard = document.querySelector(popupAddCard);
+
 //кнопка редактирования профиля
 const editButton = document.querySelector(".profile__edit-button");
 //строка профиля имя
@@ -12,25 +23,20 @@ const profileAvatar = document.querySelector(".profile__avatar");
 const nameInput = document.querySelector("#author-name");
 //строка модального окна профессиональная деятельность
 const jobInput = document.querySelector("#profession");
-//модальное окно добавления аватара
-const popupAvatar = document.querySelector(".popup_theme_avatar");
-//Кнопка добавления нового аватара
+//селектор модального окна добавления аватара
 const addAvatarButton = document.querySelector(".profile__avatar-button");
 //Строка ввода ссылки на новый аватар
 const avatarLink = document.querySelector("#avatar-link");
 
 //Перечень всех карточек
-const cardsContainer = document.querySelector(".cards__list");
+const cardsContainer = ".cards__list";
+const cardsContainerElement = document.querySelector(cardsContainer);
 //Строка ввода названия карточки в попапе
 const cardName = document.querySelector("#card-name");
 //Строка ввода ссылки на картинку карточки в попапе
 const cardLink = document.querySelector("#card-link");
-//модально окно изображения
-const popupImgOpen = document.querySelector(".popup_theme_img");
 //Кнопка добавления карточки
 const addCardButton = document.querySelector(".profile__add-button");
-//Модальное окно добавления карточки
-const popupAddCard = document.querySelector(".popup_theme_card");
 //Селектор template карточки
 const cardTemp = "#card-template";
 //Конфиг входа с токеном и заголовками
@@ -43,10 +49,11 @@ const config = {
 };
 const items = [];
 
+const popupAvatarForm = elementPopupAvatar.querySelector(".popup__form");
+const popupMainForm = elementPopupMain.querySelector(".popup__form");
+const popupAddCardForm = elementPopupAddCard.querySelector(".popup__form");
 
-// Запрос всех форм
-const forms = document.querySelectorAll(".popup__form");
-const selectors = {
+const selectorsAndFormClasses = {
   inputSelector: ".popup__field",
   submitButtonSelector: ".popup__submit-button",
   inactiveButtonClass: "popup__submit-button_disabled",
@@ -55,10 +62,15 @@ const selectors = {
   inputError: ".popup__field-error",
 };
 
-const selectorInfo = {
+const profileSelectors = {
   name: ".profile__title",
-  about: ".profile__subtitle"
-}
+  about: ".profile__subtitle",
+  avatar: ".profile__avatar",
+  id: "",
+};
+
+//Создадим элемент класса Api и передадие ему настройки
+const api = new Api(config);
 
 export {
   popupMain,
@@ -78,8 +90,14 @@ export {
   addCardButton,
   popupAddCard,
   cardTemp,
-  selectors,
-  forms,
-  config,
-  selectorInfo,
+  selectorsAndFormClasses,
+  profileSelectors,
+  elementPopupMain,
+  elementPopupAvatar,
+  elementPopupAddCard,
+  cardsContainerElement,
+  popupAvatarForm,
+  popupMainForm,
+  popupAddCardForm,
+  api,
 };
