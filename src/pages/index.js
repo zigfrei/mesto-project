@@ -29,11 +29,12 @@ import Card from "../components/Card.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import FormValidator from "../components/FormValidator.js";
-import UserInfo from "../components/UserInfo.js";
 import Section from "../components/Section.js";
+import UserInfo from "../components/UserInfo.js";
 
-//Создадим элемент класса UserInfo
+// //Создадим элемент класса UserInfo
 const info = new UserInfo(profileSelectors);
+
 
 //Функция создания новой карточки
 function createCard(element) {
@@ -45,6 +46,16 @@ function createCard(element) {
   );
   return cardElement.createCard();
 }
+
+const sectionCard = new Section(
+  {
+    items: "",
+    renderer: (el) => {
+      sectionCard.setItem(createCard(el));
+    },
+  },
+  cardsContainer
+);
 
 //Функция открытия попапа картинки при клике на картинку
 function handleCardClick(cardTitle, cardImage) {
@@ -126,8 +137,9 @@ validMainPopup.enableValidation();
 
 //Слушатель нажатия на кнопку редактора профиля
 editButton.addEventListener("click", () => {
-  nameInput.value = info.getUserInfo().name;
-  jobInput.value = info.getUserInfo().about;
+  const getInfo = info.getUserInfo();
+  nameInput.value = getInfo.name;
+  jobInput.value = getInfo.about;
   popupEditPersonalInfo.openPopup();
 });
 
@@ -137,16 +149,7 @@ function handleSubmitCardForm() {
   api
     .postCard(cardName, cardLink)
     .then((data) => {
-      const sectionSingleCard = new Section(
-        {
-          items: data,
-          renderer: (el) => {
-            sectionSingleCard.setItem(createCard(el));
-          },
-        },
-        cardsContainer
-      );
-      sectionSingleCard.prependItem(data);
+      sectionCard.prependItem(data);
       popupEditCard.closePopup();
     })
     .catch((err) => {
@@ -173,19 +176,12 @@ addCardButton.addEventListener("click", () => {
 
 Promise.all([api.getInitialCards(), api.getUserProfile()])
   .then(([cardsData, userInfo]) => {
-    const sectionCards = new Section(
-      {
-        items: cardsData,
-        renderer: (element) => {
-          sectionCards.setItem(createCard(element));
-        },
-      },
-      cardsContainer
-    );
-    sectionCards.renderItems(cardsData);
-
+    sectionCard.renderItems(cardsData);
     info.setUserInfo(userInfo);
   })
   .catch((err) => {
     console.log(err);
   });
+
+
+

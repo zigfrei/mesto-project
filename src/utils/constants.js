@@ -47,7 +47,7 @@ const config = {
     "Content-Type": "application/json",
   },
 };
-const items = [];
+
 
 const popupAvatarForm = elementPopupAvatar.querySelector(".popup__form");
 const popupMainForm = elementPopupMain.querySelector(".popup__form");
@@ -71,6 +71,7 @@ const profileSelectors = {
 
 //Создадим элемент класса Api и передадие ему настройки
 const api = new Api(config);
+
 
 export {
   popupMain,

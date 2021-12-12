@@ -6,7 +6,7 @@ export default class Api{
   }
 
 //Проверка ответа от сервера на корректность
-_checkForBugs(res) {
+_checkResponse(res) {
   if (res.ok) {
     return res.json();
   }
@@ -17,14 +17,14 @@ _checkForBugs(res) {
 getUserProfile() {
   return fetch(`${this._baseUrl}/users/me`, {
     headers: this._headers,
-  }).then((res) => this._checkForBugs(res));
+  }).then((res) => this._checkResponse(res));
 };
 
 //Получение набора карточек с сервера
 getInitialCards() {
   return fetch(`${this._baseUrl}/cards`, {
     headers: this._headers,
-  }).then((res) => this._checkForBugs(res));
+  }).then((res) => this._checkResponse(res));
 };
 
 //Функция замены данных профиля на сервере
@@ -36,7 +36,7 @@ patchProfile(nameInput, jobInput) {
       name: nameInput.value,
       about: jobInput.value,
     }),
-  }).then((res) => this._checkForBugs(res));
+  }).then((res) => this._checkResponse(res));
 };
 
 //Функция удаления мной созданной карточки
@@ -44,21 +44,21 @@ removeCard (cardId) {
   return fetch(`${this._baseUrl}/cards/${cardId}`, {
     method: "DELETE",
     headers: this._headers,
-  }).then((res) => this._checkForBugs(res));
+  }).then((res) => this._checkResponse(res));
 };
 
 addLike(cardId, cardLikeCounter) {
   return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
     method: "PUT",
     headers: this._headers,
-  }).then((res) => this._checkForBugs(res));
+  }).then((res) => this._checkResponse(res));
 };
 
 deleteLike (cardId, cardLikeCounter) {
   return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
     method: "DELETE",
     headers: this._headers,
-  }).then((res) => this._checkForBugs(res));
+  }).then((res) => this._checkResponse(res));
 };
 
 //Функция замены аватара профиля
@@ -69,7 +69,7 @@ patchAvatar(avatarLink) {
     body: JSON.stringify({
       avatar: avatarLink.value,
     }),
-  }).then((res) => this._checkForBugs(res));
+  }).then((res) => this._checkResponse(res));
 };
 
 //Функция отправки карточки на сервер
@@ -81,7 +81,7 @@ postCard(cardName, cardLink) {
       name: cardName.value,
       link: cardLink.value,
     }),
-  }).then((res) => this._checkForBugs(res));
+  }).then((res) => this._checkResponse(res));
 };
 
 }
