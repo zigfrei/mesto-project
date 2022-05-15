@@ -2,88 +2,67 @@ import "./index.css";
 import {
   popupMain,
   editButton,
-  profileTitleName,
-  profileSubtitleName,
-  profileAvatar,
   nameInput,
   jobInput,
-  profileFormElement,
   popupAvatar,
   addAvatarButton,
-  addAvatarForm,
   cardsContainer,
   popupImgOpen,
   addCardButton,
   popupAddCard,
-  formCardElement,
-} from "../components/constants.js";
-import { openPopup, closePopup } from "../components/modal.js";
-import { createCard, deleteCard, toggleLikeCard } from "../components/card.js";
-import { handleCloseButtonAndOverlayClick } from "../components/utils.js";
-import {
-  enableValidation,
-  disableSubmitButton,
-} from "../components/validate.js";
-import {
-  getInitialCards,
-  getUserProfile,
-  patchAvatar,
-  postCard,
-  patchProfile,
-  removeCard,
-  addLike,
-  deleteLike,
-} from "../components/api.js";
+  avatarLink,
+  cardName,
+  cardLink,
+  cardTemp,
+  selectorsAndFormClasses,
+  profileSelectors,
+  elementPopupMain,
+  elementPopupAvatar,
+  elementPopupAddCard,
+  popupAvatarForm,
+  popupMainForm,
+  popupAddCardForm,
+  api,
+} from "../utils/constants.js";
 
-//Обработчик для удаления карточки
-function handleRemoveCard(cardElement, cardId) {
-  removeCard(cardId)
-    .then(() => deleteCard(cardElement))
-    .catch((err) => {
-      console.log(err);
-    });
+import Card from "../components/Card.js";
+import PopupWithImage from "../components/PopupWithImage.js";
+import PopupWithForm from "../components/PopupWithForm.js";
+import FormValidator from "../components/FormValidator.js";
+import Section from "../components/Section.js";
+import UserInfo from "../components/UserInfo.js";
+
+// //Создадим элемент класса UserInfo
+const info = new UserInfo(profileSelectors);
+
+//Функция создания новой карточки
+function createCard(element) {
+  const cardElement = new Card(
+    element,
+    JSON.parse(sessionStorage.getItem("profileId")),
+    cardTemp,
+    handleCardClick
+  );
+  return cardElement.createCard();
 }
 
-//Обработчик для лайка карточки
-function handleLikeCard(cardElement, cardId, cardLikeCounter) {
-  if (!cardElement.classList.contains("cards__like-button_status_active")) {
-    addLike(cardId, cardLikeCounter)
-      .then((data) => {
-        toggleLikeCard(cardElement, cardLikeCounter, data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  } else {
-    deleteLike(cardId, cardLikeCounter)
-      .then((data) => {
-        toggleLikeCard(cardElement, cardLikeCounter, data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-}
+const sectionCard = new Section(
+  {
+    items: "",
+    renderer: (el) => {
+      sectionCard.setItem(createCard(el));
+    },
+  },
+  cardsContainer
+);
 
-//индивидуальный номер профиля
-let profileId = 0;
+//Cоздание элемента класса модального окна картинки
+const popupImg = new PopupWithImage(popupImgOpen);
+popupImg.setEventListeners();
 
-//Функция добавления информации в профиль с массива сервера
-const addContentFromArr = (
-  profileName,
-  profileAbout,
-  profileAvatar,
-  serverArr
-) => {
-  profileName.textContent = serverArr.name;
-  profileAbout.textContent = serverArr.about;
-  profileAvatar.src = serverArr.avatar;
-  profileId = serverArr._id;
-};
-
-//функция добавления карточки в контейнер
-function addCard(container, cardElementAdd) {
-  container.prepend(cardElementAdd);
+//Функция открытия попапа картинки при клике на картинку
+function handleCardClick(cardTitle, cardImage) {
+  popupImg.openPopup(cardImage, cardTitle);
 }
 
 const renderLoading = (isLoading, popupElement) => {
@@ -96,145 +75,111 @@ const renderLoading = (isLoading, popupElement) => {
   }
 };
 
-//Редактирование имени и информации о себе
-//Функция добавление информации из профиля в форму
-const addContentFromProfile = (content, input) => {
-  input.value = content.textContent;
-};
-
-//Функция добавления карточки из модального окна
-function addCardFromPopup(evt) {
-  evt.preventDefault();
-  renderLoading(true, popupAddCard);
-  postCard()
+//Функция добавления нового аватара по нажатию кнопки в модальном окне
+function handleSubmitAvatarForm() {
+  renderLoading(true, elementPopupAvatar);
+  api
+    .patchAvatar(avatarLink)
     .then((data) => {
-      addCard(
-        cardsContainer,
-        createCard(data, profileId, handleRemoveCard, handleLikeCard)
-      );
-      closePopup(popupAddCard);
+      info.setUserInfo(data);
+      popupEditAvatar.closePopup();
     })
     .catch((err) => {
       console.log(err);
     })
     .finally(() => {
-      renderLoading(false, popupAddCard);
+      renderLoading(false, elementPopupAvatar);
     });
-  formCardElement.reset();
 }
 
-//Слушатель нажатия на кнопку редактора профиля
-editButton.addEventListener("click", () => {
-  addContentFromProfile(profileTitleName, nameInput);
-  addContentFromProfile(profileSubtitleName, jobInput);
-  openPopup(popupMain);
-});
+//Создание элемента класса модального окна с формой для аватара
+const popupEditAvatar = new PopupWithForm(popupAvatar, handleSubmitAvatarForm);
+popupEditAvatar.setEventListeners();
+const validAvatarPopup = new FormValidator(
+  selectorsAndFormClasses,
+  popupAvatarForm
+);
+validAvatarPopup.enableValidation();
 
 //слушатель нажатия на кнопку добавления аватара
 addAvatarButton.addEventListener("click", () => {
-  openPopup(popupAvatar);
+  validAvatarPopup.disableSubmitButton();
+  popupEditAvatar.openPopup();
 });
 
-//Слушатель закрытия модалього окна добавления аватара
-popupAvatar.addEventListener("click", (event) => {
-  handleCloseButtonAndOverlayClick(event, popupAvatar);
-});
-
-//Слушатель добавления нового аватара по нажатию кнопки в модальном окне
-addAvatarForm.addEventListener("submit", (event) => {
-  renderLoading(true, popupAvatar);
-  patchAvatar()
+//Функция сохранения информации профиля на сервере после нажатия кнопки
+function handleSubmitProfileForm() {
+  renderLoading(true, elementPopupMain);
+  api
+    .patchProfile(nameInput, jobInput)
     .then((data) => {
-      profileAvatar.src = data.avatar;
-      closePopup(popupAvatar);
+      info.setUserInfo(data);
+      popupEditPersonalInfo.closePopup();
     })
     .catch((err) => {
       console.log(err);
     })
     .finally(() => {
-      renderLoading(false, popupAvatar);
-    });
-
-  disableSubmitButton(addAvatarForm);
-});
-
-//Слушатель выхода из редактора профиля
-popupMain.addEventListener("click", (event) => {
-  handleCloseButtonAndOverlayClick(event, popupMain);
-});
-
-//Функция сохранения профиля на сервере после нажатия кнопки
-function submitProfilePatch(evt) {
-  evt.preventDefault();
-  renderLoading(true, popupMain);
-  patchProfile()
-    .then((data) => {
-      addContentFromArr(
-        profileTitleName,
-        profileSubtitleName,
-        profileAvatar,
-        data
-      );
-      closePopup(popupMain);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      renderLoading(false, popupMain);
+      renderLoading(false, elementPopupMain);
     });
 }
 
-//Слушатель сохранения изменений в профиле по нажатию кнопки в модальном окне
-profileFormElement.addEventListener("submit", submitProfilePatch);
+//Создание элемента класса попар с формой для профиля
+const popupEditPersonalInfo = new PopupWithForm(
+  popupMain,
+  handleSubmitProfileForm
+);
+popupEditPersonalInfo.setEventListeners();
+const validMainPopup = new FormValidator(
+  selectorsAndFormClasses,
+  popupMainForm
+);
+validMainPopup.enableValidation();
+
+//Слушатель нажатия на кнопку редактора профиля
+editButton.addEventListener("click", () => {
+  const getInfo = info.getUserInfo();
+  nameInput.value = getInfo.name;
+  jobInput.value = getInfo.about;
+  popupEditPersonalInfo.openPopup();
+});
+
+//Функция добавления карточки из модального окна
+function handleSubmitCardForm() {
+  renderLoading(true, elementPopupAddCard);
+  api
+    .postCard(cardName, cardLink)
+    .then((data) => {
+      sectionCard.prependItem(data);
+      popupEditCard.closePopup();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      renderLoading(false, elementPopupAddCard);
+    });
+}
+
+const popupEditCard = new PopupWithForm(popupAddCard, handleSubmitCardForm);
+popupEditCard.setEventListeners();
+const validAddCardPopup = new FormValidator(
+  selectorsAndFormClasses,
+  popupAddCardForm
+);
+validAddCardPopup.enableValidation();
 
 //Слушатель нажатия на кнопку для открытия модального окна "добавить карточку"
 addCardButton.addEventListener("click", () => {
-  openPopup(popupAddCard);
+  validAddCardPopup.disableSubmitButton();
+  popupEditCard.openPopup();
 });
 
-//Слушатель закрытия модального окна при нажатии на кнопку или вне поля модального окна
-popupAddCard.addEventListener("click", (event) => {
-  handleCloseButtonAndOverlayClick(event, popupAddCard);
-});
-
-//Слушатель добавления карточки по нажатию кнопки в модальном окне
-formCardElement.addEventListener("submit", (event) => {
-  addCardFromPopup(event);
-  disableSubmitButton(formCardElement);
-});
-
-//Слушатель закрытия модального окна картинки при нажатии на кнопку или вне поля модального окна
-popupImgOpen.addEventListener("click", (event) => {
-  handleCloseButtonAndOverlayClick(event, popupImgOpen);
-});
-
-enableValidation({
-  formSelector: ".popup__form",
-  inputSelector: ".popup__field",
-  submitButtonSelector: ".popup__submit-button",
-  inactiveButtonClass: "popup__submit-button_disabled",
-  inputErrorClass: "popup__field_type_error",
-  errorClass: "popup__field-error_active",
-});
-
-Promise.all([getInitialCards(), getUserProfile()])
+Promise.all([api.getInitialCards(), api.getUserProfile()])
   .then(([cardsData, userInfo]) => {
-    cardsData.forEach((element) => {
-      addCard(
-        cardsContainer,
-        createCard(element, userInfo._id, handleRemoveCard, handleLikeCard)
-      );
-    });
-    addContentFromArr(
-      profileTitleName,
-      profileSubtitleName,
-      profileAvatar,
-      userInfo
-    );
+    sectionCard.renderItems(cardsData);
+    info.setUserInfo(userInfo);
   })
   .catch((err) => {
     console.log(err);
   });
-
-export { renderLoading };
